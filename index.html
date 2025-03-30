@@ -483,43 +483,30 @@ input:focus, select:focus {
             <h1 class="app-title">Credit Card Optimizer</h1>
         </div>
         
-        <div class="tabs">
-            <button class="tab active" data-tab="optimize">Optimize</button>
-            <button class="tab" data-tab="manage">Manage Cards</button>
-            <button class="tab" data-tab="analyze">Analyze Collection</button>
-        </div>
-        
-        <div class="tab-content active" id="optimize-tab">
-            <div class="form-group">
-                <label for="category-select">What are you buying?</label>
-                <select id="category-select">
-                    <option value="">Select a category</option>
-                    <option value="Amazon">Amazon</option>
-                    <option value="Airfare">Airfare</option>
-                    <option value="Car Rentals">Car Rentals</option>
-                    <option value="Dining">Dining</option>
-                    <option value="Gas Stations">Gas Stations</option>
-                    <option value="Grocery">Grocery</option>
-                    <option value="Hotels">Hotels</option>
-                    <option value="Costco">Costco</option>
-                    <option value="Streaming Services">Streaming Services</option>
-                    <option value="Transit">Transit</option>
-                    <option value="Travel">Travel</option>
-                    <option value="Whole Foods">Whole Foods</option>
-                    <option value="Other">Other</option>
-                </select>
-            </div>
+<div class="tabs">
+    <button class="tab active" data-tab="optimize">Optimize</button>
+    <button class="tab" data-tab="manage">Manage Cards</button>
+    <button class="tab" data-tab="analyze">Analyze Collection</button>
+</div>
 
-            <div class="tab-content" id="analyze-tab">
-            <div class="form-group">
-                    <button id="analyze-cards-button" class="btn-primary">Analyze My Cards</button>
-                    <p class="analyze-description">Find out which cards might be redundant based on your collection.</p>
-                </div>
-                
-                <div id="analysis-results" class="analysis-results">
-                    <!-- Results will be populated here -->
-                </div>
-        </div>
+<div class="tab-content active" id="optimize-tab">
+    <!-- Your existing content -->
+</div>
+
+<div class="tab-content" id="manage-tab">
+    <!-- Your existing content -->
+</div>
+
+<div class="tab-content" id="analyze-tab">
+    <div class="form-group">
+        <button id="analyze-cards-button" class="btn-primary">Analyze My Cards</button>
+        <p class="analyze-description">Find out which cards might be redundant based on your collection.</p>
+    </div>
+    
+    <div id="analysis-results" class="analysis-results">
+        <!-- Results will be populated here -->
+    </div>
+</div>
                     
             <div class="form-group" id="custom-category-group" style="display: none;">
                 <label for="custom-category">Specify category or merchant:</label>
@@ -1291,32 +1278,38 @@ function initApp() {
     renderCardsManage();
     
     // Add event listeners
-// New tab handling that will work with any number of tabs
-const tabs = document.querySelectorAll('.tab');
-tabs.forEach(tab => {
-    tab.addEventListener('click', function() {
-        // First deactivate all tabs
-        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-        document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-        
-        // Then activate the clicked tab
-        this.classList.add('active');
-        const tabId = this.getAttribute('data-tab');
-        document.getElementById(tabId + '-tab').classList.add('active');
+    categorySelect.addEventListener('change', handleCategoryChange);
+    customCategoryInput.addEventListener('input', handleCustomCategoryInput);
+    
+    // New tab handling that will work with any number of tabs
+    const tabs = document.querySelectorAll('.tab');
+    tabs.forEach(tab => {
+        tab.addEventListener('click', function() {
+            // First deactivate all tabs
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            
+            // Then activate the clicked tab
+            this.classList.add('active');
+            const tabId = this.getAttribute('data-tab');
+            document.getElementById(tabId + '-tab').classList.add('active');
+        });
     });
-});
+    
+    addCardButton.addEventListener('click', openAddCardModal);
+    resetCardsButton.addEventListener('click', resetToDefaultCards);
+    modalClose.addEventListener('click', closeModal);
+    addCategoryButton.addEventListener('click', addRewardCategory);
+    saveCardButton.addEventListener('click', saveCard);
+    cancelButton.addEventListener('click', closeModal);
+    
+    // Add listener for analyze button
+    if (analyzeCardsButton) {
+        analyzeCardsButton.addEventListener('click', analyzeCards);
+    }
 }
 
-// Card Redundancy Analysis Feature
-// Add this code to your existing JavaScript
 
-// First, add a new tab to your HTML. Add this inside the tabs div:
-/*
-<button class="tab" data-tab="analyze">Analyze Collection</button>
-*/
-
-// And add this new tab content div after your existing tab-content divs:
-/*
 <div class="tab-content" id="analyze-tab">
     <div class="form-group">
         <button id="analyze-cards-button" class="btn-primary">Analyze My Cards</button>
@@ -1327,10 +1320,7 @@ tabs.forEach(tab => {
         <!-- Results will be populated here -->
     </div>
 </div>
-*/
 
-// Add these styles to your CSS
-/*
 .analysis-description {
     margin-top: 12px;
     color: var(--neutral-dark);
@@ -1534,10 +1524,7 @@ function initAppAdditions() {
     }
 }
 
-// Call this at the end of your existing initApp function
-// initAppAdditions();
-
-// Card Redundancy Analysis Logic
+// 4. Add the card analysis functions
 function analyzeCards() {
     // Show loading spinner
     analysisResults.innerHTML = `
@@ -1881,10 +1868,195 @@ function capitalizeFirstLetter(string) {
     return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
-function initAppAdditions() {
-    if (analyzeCardsButton) {
-        analyzeCardsButton.addEventListener('click', analyzeCards);
-    }
+.analysis-description {
+    margin-top: 12px;
+    color: var(--neutral-dark);
+}
+
+.analysis-results {
+    margin-top: 24px;
+}
+
+.analysis-card {
+    margin-bottom: 24px;
+    border: 1px solid var(--neutral-medium);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.analysis-card-header {
+    padding: 16px;
+    background-color: var(--neutral-light);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--neutral-medium);
+}
+
+.redundant-card {
+    background-color: #FFF5F5;
+    border-left: 5px solid var(--danger-color);
+}
+
+.unique-card {
+    background-color: #F0FFF4;
+    border-left: 5px solid var(--success-color);
+}
+
+.analysis-card-body {
+    padding: 16px;
+    background-color: white;
+}
+
+.analysis-card-title {
+    font-weight: 600;
+    color: var(--neutral-dark);
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+}
+
+.redundant-badge {
+    background-color: var(--danger-color);
+    color: white;
+    font-size: 12px;
+    padding: 4px 8px;
+    border-radius: 12px;
+    margin-left: 12px;
+}
+
+.unique-badge {
+    background-color: var(--success-color);
+    color: white;
+    font-size: 12px;
+    padding: 4px 8px;
+    border-radius: 12px;
+    margin-left: 12px;
+}
+
+.card-comparison-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 16px;
+}
+
+.card-comparison-table th, .card-comparison-table td {
+    padding: 8px;
+    text-align: left;
+    border-bottom: 1px solid var(--neutral-medium);
+}
+
+.card-comparison-table th {
+    background-color: var(--neutral-light);
+    font-weight: 600;
+}
+
+.worse-rate {
+    color: var(--danger-color);
+}
+
+.better-rate {
+    color: var(--success-color);
+    font-weight: 600;
+}
+
+.same-rate {
+    color: var(--neutral-dark);
+}
+
+.annual-fee-savings {
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--success-color);
+    margin-top: 16px;
+    display: flex;
+    align-items: center;
+}
+
+.annual-fee-savings:before {
+    content: '💰';
+    margin-right: 10px;
+    font-size: 20px;
+}
+
+.unique-benefits {
+    margin-top: 16px;
+}
+
+.unique-benefits-title {
+    font-weight: 600;
+    margin-bottom: 8px;
+}
+
+.benefits-list {
+    padding-left: 24px;
+}
+
+.benefits-list li {
+    margin-bottom: 4px;
+}
+
+.summary-banner {
+    padding: 16px;
+    border-radius: 8px;
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    font-weight: 600;
+}
+
+.summary-banner.good {
+    background-color: #F0FFF4;
+    color: var(--success-color);
+}
+
+.summary-banner.warning {
+    background-color: #FFFAF0;
+    color: var(--warning-color);
+}
+
+.summary-banner:before {
+    margin-right: 12px;
+    font-size: 24px;
+}
+
+.summary-banner.good:before {
+    content: '✅';
+}
+
+.summary-banner.warning:before {
+    content: '⚠️';
+}
+
+.no-redundancy {
+    text-align: center;
+    padding: 24px;
+    background-color: #F0FFF4;
+    border-radius: 8px;
+    color: var(--success-color);
+    font-weight: 600;
+    font-size: 18px;
+}
+
+.loading-spinner {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 24px;
+}
+
+.spinner {
+    border: 4px solid #f3f3f3;
+    border-top: 4px solid var(--primary-color);
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
 }
     
 // Load cards from localStorage or use defaults
