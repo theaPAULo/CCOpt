@@ -76,6 +76,15 @@ body {
     transition: all 0.3s ease;
 }
 
+.analysis-description {
+    margin-top: 12px;
+    color: var(--neutral-dark);
+}
+
+.analysis-results {
+    margin-top: 24px;
+}
+
 .tab.active {
     color: var(--primary-dark);
     border-bottom: 3px solid var(--primary-dark);
@@ -477,6 +486,7 @@ input:focus, select:focus {
         <div class="tabs">
             <button class="tab active" data-tab="optimize">Optimize</button>
             <button class="tab" data-tab="manage">Manage Cards</button>
+            <button class="tab" data-tab="analyze">Analyze Collection</button>
         </div>
         
         <div class="tab-content active" id="optimize-tab">
@@ -499,7 +509,18 @@ input:focus, select:focus {
                     <option value="Other">Other</option>
                 </select>
             </div>
-            
+
+            <div class="tab-content" id="analyze-tab">
+            <div class="form-group">
+                    <button id="analyze-cards-button" class="btn-primary">Analyze My Cards</button>
+                    <p class="analyze-description">Find out which cards might be redundant based on your collection.</p>
+                </div>
+                
+                <div id="analysis-results" class="analysis-results">
+                    <!-- Results will be populated here -->
+                </div>
+        </div>
+                    
             <div class="form-group" id="custom-category-group" style="display: none;">
                 <label for="custom-category">Specify category or merchant:</label>
                 <input type="text" id="custom-category" placeholder="Enter store or category">
@@ -614,6 +635,8 @@ const addCategoryButton = document.getElementById('add-category-button');
 const saveCardButton = document.getElementById('save-card-button');
 const cancelButton = document.getElementById('cancel-button');
 const notification = document.getElementById('notification');
+const analyzeCardsButton = document.getElementById('analyze-cards-button');
+const analysisResults = document.getElementById('analysis-results');
 
 // Default Credit Card Data
 const defaultCards = [
@@ -1283,8 +1306,589 @@ function initApp() {
     addCategoryButton.addEventListener('click', addRewardCategory);
     saveCardButton.addEventListener('click', saveCard);
     cancelButton.addEventListener('click', closeModal);
+    initAppAdditions();
 }
 
+// Card Redundancy Analysis Feature
+// Add this code to your existing JavaScript
+
+// First, add a new tab to your HTML. Add this inside the tabs div:
+/*
+<button class="tab" data-tab="analyze">Analyze Collection</button>
+*/
+
+// And add this new tab content div after your existing tab-content divs:
+/*
+<div class="tab-content" id="analyze-tab">
+    <div class="form-group">
+        <button id="analyze-cards-button" class="btn-primary">Analyze My Cards</button>
+        <p class="analyze-description">Find out which cards might be redundant based on your collection.</p>
+    </div>
+    
+    <div id="analysis-results" class="analysis-results">
+        <!-- Results will be populated here -->
+    </div>
+</div>
+*/
+
+// Add these styles to your CSS
+/*
+.analysis-description {
+    margin-top: 12px;
+    color: var(--neutral-dark);
+}
+
+.analysis-results {
+    margin-top: 24px;
+}
+
+.analysis-card {
+    margin-bottom: 24px;
+    border: 1px solid var(--neutral-medium);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.analysis-card-header {
+    padding: 16px;
+    background-color: var(--neutral-light);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--neutral-medium);
+}
+
+.redundant-card {
+    background-color: #FFF5F5;
+    border-left: 5px solid var(--danger-color);
+}
+
+.unique-card {
+    background-color: #F0FFF4;
+    border-left: 5px solid var(--success-color);
+}
+
+.analysis-card-body {
+    padding: 16px;
+    background-color: white;
+}
+
+.analysis-card-title {
+    font-weight: 600;
+    color: var(--neutral-dark);
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+}
+
+.redundant-badge {
+    background-color: var(--danger-color);
+    color: white;
+    font-size: 12px;
+    padding: 4px 8px;
+    border-radius: 12px;
+    margin-left: 12px;
+}
+
+.unique-badge {
+    background-color: var(--success-color);
+    color: white;
+    font-size: 12px;
+    padding: 4px 8px;
+    border-radius: 12px;
+    margin-left: 12px;
+}
+
+.card-comparison-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 16px;
+}
+
+.card-comparison-table th, .card-comparison-table td {
+    padding: 8px;
+    text-align: left;
+    border-bottom: 1px solid var(--neutral-medium);
+}
+
+.card-comparison-table th {
+    background-color: var(--neutral-light);
+    font-weight: 600;
+}
+
+.worse-rate {
+    color: var(--danger-color);
+}
+
+.better-rate {
+    color: var(--success-color);
+    font-weight: 600;
+}
+
+.same-rate {
+    color: var(--neutral-dark);
+}
+
+.annual-fee-savings {
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--success-color);
+    margin-top: 16px;
+    display: flex;
+    align-items: center;
+}
+
+.annual-fee-savings:before {
+    content: '💰';
+    margin-right: 10px;
+    font-size: 20px;
+}
+
+.unique-benefits {
+    margin-top: 16px;
+}
+
+.unique-benefits-title {
+    font-weight: 600;
+    margin-bottom: 8px;
+}
+
+.benefits-list {
+    padding-left: 24px;
+}
+
+.benefits-list li {
+    margin-bottom: 4px;
+}
+
+.summary-banner {
+    padding: 16px;
+    border-radius: 8px;
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    font-weight: 600;
+}
+
+.summary-banner.good {
+    background-color: #F0FFF4;
+    color: var(--success-color);
+}
+
+.summary-banner.warning {
+    background-color: #FFFAF0;
+    color: var(--warning-color);
+}
+
+.summary-banner:before {
+    margin-right: 12px;
+    font-size: 24px;
+}
+
+.summary-banner.good:before {
+    content: '✅';
+}
+
+.summary-banner.warning:before {
+    content: '⚠️';
+}
+
+.no-redundancy {
+    text-align: center;
+    padding: 24px;
+    background-color: #F0FFF4;
+    border-radius: 8px;
+    color: var(--success-color);
+    font-weight: 600;
+    font-size: 18px;
+}
+
+.loading-spinner {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 24px;
+}
+
+.spinner {
+    border: 4px solid #f3f3f3;
+    border-top: 4px solid var(--primary-color);
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+*/
+
+// Add these to your DOM Elements section
+const analyzeCardsButton = document.getElementById('analyze-cards-button');
+const analysisResults = document.getElementById('analysis-results');
+
+// Add this to your initApp function
+function initAppAdditions() {
+    if (analyzeCardsButton) {
+        analyzeCardsButton.addEventListener('click', analyzeCards);
+    }
+}
+
+// Call this at the end of your existing initApp function
+// initAppAdditions();
+
+// Card Redundancy Analysis Logic
+function analyzeCards() {
+    // Show loading spinner
+    analysisResults.innerHTML = `
+        <div class="loading-spinner">
+            <div class="spinner"></div>
+        </div>
+    `;
+    
+    // Small delay to show loading spinner (UI enhancement)
+    setTimeout(() => {
+        const analysis = performCardAnalysis();
+        renderAnalysisResults(analysis);
+    }, 500);
+}
+
+function performCardAnalysis() {
+    // Analysis results structure
+    const analysis = {
+        redundantCards: [],
+        uniqueCards: [],
+        potentialSavings: 0
+    };
+    
+    // Skip analysis if too few cards
+    if (cardsData.length <= 1) {
+        return analysis;
+    }
+    
+    // Analyze each card
+    cardsData.forEach(card => {
+        const redundancyCheck = checkCardRedundancy(card, cardsData);
+        
+        if (redundancyCheck.isRedundant) {
+            analysis.redundantCards.push({
+                card: card,
+                coveringCards: redundancyCheck.coveringCards,
+                categoryComparisons: redundancyCheck.categoryComparisons,
+                uniqueBenefits: extractUniqueBenefits(card)
+            });
+            
+            analysis.potentialSavings += card.annualFee;
+        } else {
+            analysis.uniqueCards.push({
+                card: card,
+                uniqueCategories: redundancyCheck.uniqueCategories,
+                uniqueBenefits: extractUniqueBenefits(card)
+            });
+        }
+    });
+    
+    return analysis;
+}
+
+function checkCardRedundancy(cardToCheck, allCards) {
+    const result = {
+        isRedundant: false,
+        coveringCards: [],
+        categoryComparisons: [],
+        uniqueCategories: []
+    };
+    
+    // Extract all categories from this card
+    const cardCategories = Object.keys(cardToCheck.categories);
+    
+    // Track which categories are covered by other cards
+    const coveredCategories = {};
+    cardCategories.forEach(category => {
+        coveredCategories[category] = [];
+    });
+    
+    // Check against each other card
+    allCards.forEach(otherCard => {
+        // Skip comparing to self
+        if (otherCard.id === cardToCheck.id) return;
+        
+        // Check each category in the card we're analyzing
+        cardCategories.forEach(category => {
+            const thisRate = cardToCheck.categories[category].rate;
+            
+            // If other card has this category with equal or better rate
+            if (otherCard.categories[category] && otherCard.categories[category].rate >= thisRate) {
+                coveredCategories[category].push({
+                    card: otherCard,
+                    rate: otherCard.categories[category].rate,
+                    details: otherCard.categories[category].details
+                });
+            }
+        });
+    });
+    
+    // Check which categories are unique or not fully covered
+    const uniqueCategories = [];
+    const comparisonDetails = [];
+    
+    cardCategories.forEach(category => {
+        if (coveredCategories[category].length === 0) {
+            // This category is unique to this card
+            uniqueCategories.push({
+                category: category,
+                rate: cardToCheck.categories[category].rate,
+                details: cardToCheck.categories[category].details
+            });
+        } else {
+            // This category is covered by other cards
+            comparisonDetails.push({
+                category: category,
+                thisCard: {
+                    rate: cardToCheck.categories[category].rate,
+                    details: cardToCheck.categories[category].details
+                },
+                otherCards: coveredCategories[category]
+            });
+        }
+    });
+    
+    // If all categories are covered by other cards, this card is redundant
+    result.isRedundant = uniqueCategories.length === 0;
+    result.uniqueCategories = uniqueCategories;
+    result.categoryComparisons = comparisonDetails;
+    
+    // Find the minimum set of cards that cover all categories
+    if (result.isRedundant) {
+        result.coveringCards = findMinimumCoveringCards(cardToCheck, allCards);
+    }
+    
+    return result;
+}
+
+function findMinimumCoveringCards(cardToCheck, allCards) {
+    // Simple greedy algorithm to find covering cards
+    const cardCategories = Object.keys(cardToCheck.categories);
+    const coveredBy = new Map();
+    
+    // For each category, find which other cards can cover it
+    cardCategories.forEach(category => {
+        const thisRate = cardToCheck.categories[category].rate;
+        
+        allCards.forEach(otherCard => {
+            if (otherCard.id !== cardToCheck.id && 
+                otherCard.categories[category] && 
+                otherCard.categories[category].rate >= thisRate) {
+                
+                if (!coveredBy.has(otherCard.id)) {
+                    coveredBy.set(otherCard.id, {
+                        card: otherCard,
+                        covers: []
+                    });
+                }
+                
+                coveredBy.get(otherCard.id).covers.push(category);
+            }
+        });
+    });
+    
+    // Convert to array and sort by number of categories covered (descending)
+    const coveringCardsArray = Array.from(coveredBy.values())
+        .sort((a, b) => b.covers.length - a.covers.length);
+    
+    // Return the top cards that together cover all categories
+    // For simplicity, we'll just return up to 2 cards that have the most coverage
+    return coveringCardsArray.slice(0, 2).map(item => item.card);
+}
+
+function extractUniqueBenefits(card) {
+    // Extract potential unique benefits from the notes field
+    if (!card.notes) return [];
+    
+    const notes = card.notes;
+    const benefitPatterns = [
+        /\$(\d+) (.*?) credit/i,
+        /free (.*?) membership/i,
+        /priority pass/i,
+        /lounge access/i,
+        /centurion/i,
+        /free checked bag/i,
+        /companion (certificate|ticket|pass)/i,
+        /free night/i,
+        /status/i,
+        /travel credit/i,
+        /rental car/i,
+        /rental car insurance/i,
+        /trip (cancellation|delay|interruption)/i,
+        /cell phone/i,
+        /anniversary/i
+    ];
+    
+    const benefits = [];
+    
+    // Check for matches with each pattern
+    benefitPatterns.forEach(pattern => {
+        const match = notes.match(pattern);
+        if (match) {
+            benefits.push(match[0]);
+        }
+    });
+    
+    // If no matches found but notes exist, just return the notes
+    if (benefits.length === 0 && notes.trim()) {
+        return [notes];
+    }
+    
+    return benefits;
+}
+
+function renderAnalysisResults(analysis) {
+    if (analysis.redundantCards.length === 0) {
+        analysisResults.innerHTML = `
+            <div class="summary-banner good">
+                Great job! Your card collection doesn't have any redundant cards.
+            </div>
+            <div class="no-redundancy">
+                Your ${cardsData.length} cards all serve unique purposes.
+            </div>
+        `;
+        return;
+    }
+    
+    // Start with a summary
+    let html = `
+        <div class="summary-banner warning">
+            We found ${analysis.redundantCards.length} potentially redundant card${analysis.redundantCards.length > 1 ? 's' : ''} that may be costing you $${analysis.potentialSavings}/year in unnecessary fees.
+        </div>
+    `;
+    
+    // Render redundant cards
+    analysis.redundantCards.forEach(item => {
+        html += `
+            <div class="analysis-card">
+                <div class="analysis-card-header redundant-card">
+                    <h3 class="analysis-card-title">
+                        ${item.card.name}
+                        <span class="redundant-badge">Potentially Redundant</span>
+                    </h3>
+                    <span>Annual Fee: $${item.card.annualFee}</span>
+                </div>
+                <div class="analysis-card-body">
+                    <p>This card's rewards are covered by these other cards:</p>
+                    <ul class="benefits-list">
+                        ${item.coveringCards.map(card => `<li>${card.name}</li>`).join('')}
+                    </ul>
+                    
+                    <table class="card-comparison-table">
+                        <thead>
+                            <tr>
+                                <th>Category</th>
+                                <th>${item.card.name}</th>
+                                <th>Better Alternative</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${renderCategoryComparisons(item.categoryComparisons)}
+                        </tbody>
+                    </table>
+                    
+                    ${item.card.annualFee > 0 ? `
+                        <div class="annual-fee-savings">
+                            Potential Savings: $${item.card.annualFee}/year
+                        </div>
+                    ` : ''}
+                    
+                    ${item.uniqueBenefits.length > 0 ? `
+                        <div class="unique-benefits">
+                            <div class="unique-benefits-title">Unique Benefits to Consider:</div>
+                            <ul class="benefits-list">
+                                ${item.uniqueBenefits.map(benefit => `<li>${benefit}</li>`).join('')}
+                            </ul>
+                        </div>
+                    ` : ''}
+                </div>
+            </div>
+        `;
+    });
+    
+    // Render unique/valuable cards
+    if (analysis.uniqueCards.length > 0) {
+        html += `<h2 class="cards-title">Valuable Cards to Keep</h2>`;
+        
+        analysis.uniqueCards.forEach(item => {
+            if (item.uniqueCategories.length > 0) {
+                html += `
+                    <div class="analysis-card">
+                        <div class="analysis-card-header unique-card">
+                            <h3 class="analysis-card-title">
+                                ${item.card.name}
+                                <span class="unique-badge">Valuable</span>
+                            </h3>
+                            <span>Annual Fee: $${item.card.annualFee}</span>
+                        </div>
+                        <div class="analysis-card-body">
+                            <p>This card offers unique or best-in-class rewards for:</p>
+                            <ul class="benefits-list">
+                                ${item.uniqueCategories.map(cat => 
+                                    `<li><strong>${capitalizeFirstLetter(cat.category)}:</strong> ${cat.rate}x - ${cat.details}</li>`
+                                ).join('')}
+                            </ul>
+                            
+                            ${item.uniqueBenefits.length > 0 ? `
+                                <div class="unique-benefits">
+                                    <div class="unique-benefits-title">Additional Benefits:</div>
+                                    <ul class="benefits-list">
+                                        ${item.uniqueBenefits.map(benefit => `<li>${benefit}</li>`).join('')}
+                                    </ul>
+                                </div>
+                            ` : ''}
+                        </div>
+                    </div>
+                `;
+            }
+        });
+    }
+    
+    analysisResults.innerHTML = html;
+}
+
+function renderCategoryComparisons(comparisons) {
+    let html = '';
+    
+    comparisons.forEach(comparison => {
+        // Find the best alternative card for this category
+        const bestAlternative = comparison.otherCards.reduce((best, current) => 
+            current.rate > best.rate ? current : best, comparison.otherCards[0]);
+        
+        const rateClass = bestAlternative.rate > comparison.thisCard.rate ? 
+            'worse-rate' : (bestAlternative.rate === comparison.thisCard.rate ? 'same-rate' : 'better-rate');
+        
+        html += `
+            <tr>
+                <td>${capitalizeFirstLetter(comparison.category)}</td>
+                <td class="${rateClass}">${comparison.thisCard.rate}x</td>
+                <td>
+                    <strong>${bestAlternative.card.name}:</strong> ${bestAlternative.rate}x
+                </td>
+            </tr>
+        `;
+    });
+    
+    return html;
+}
+
+function capitalizeFirstLetter(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+}
+
+function initAppAdditions() {
+    if (analyzeCardsButton) {
+        analyzeCardsButton.addEventListener('click', analyzeCards);
+    }
+}
+    
 // Load cards from localStorage or use defaults
 function loadCards() {
     const savedCards = localStorage.getItem('creditCards');
@@ -1733,10 +2337,12 @@ function toggleChevron(chevronElement) {
 
 // Add version info to your card database
 const cardDatabaseVersion = {
-  version: "2.0.0",
+  version: "2.1.0",
   lastUpdated: "2025-03-30",
   changeLog: [
-    {date: "2025-03-30", description: "Updated database with 30 cards"}
+    {date: "2025-03-30", description: "Added card redundancy analysis feature"},
+    {date: "2025-03-30", description: "Updated to 30 cards including United Club and Capital One Venture X"},
+    {date: "2025-03-30", description: "Initial release with 14 cards"}
   ]
 };
 
