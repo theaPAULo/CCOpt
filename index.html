@@ -1291,22 +1291,20 @@ function initApp() {
     renderCardsManage();
     
     // Add event listeners
-    categorySelect.addEventListener('change', handleCategoryChange);
-    customCategoryInput.addEventListener('input', handleCustomCategoryInput);
-    
-    tabs.forEach(tab => {
-        tab.addEventListener('click', () => {
-            switchTab(tab.getAttribute('data-tab'));
-        });
+// New tab handling that will work with any number of tabs
+const tabs = document.querySelectorAll('.tab');
+tabs.forEach(tab => {
+    tab.addEventListener('click', function() {
+        // First deactivate all tabs
+        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+        document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+        
+        // Then activate the clicked tab
+        this.classList.add('active');
+        const tabId = this.getAttribute('data-tab');
+        document.getElementById(tabId + '-tab').classList.add('active');
     });
-    
-    addCardButton.addEventListener('click', openAddCardModal);
-    resetCardsButton.addEventListener('click', resetToDefaultCards);
-    modalClose.addEventListener('click', closeModal);
-    addCategoryButton.addEventListener('click', addRewardCategory);
-    saveCardButton.addEventListener('click', saveCard);
-    cancelButton.addEventListener('click', closeModal);
-    initAppAdditions();
+});
 }
 
 // Card Redundancy Analysis Feature
