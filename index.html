@@ -5,359 +5,467 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Credit Card Optimizer</title>
     <style>
-        /* Basic Reset */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-        }
-        
-        body {
-            background-color: #f5f7fa;
-            color: #333;
-            line-height: 1.6;
-            padding: 20px;
-        }
-        
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            background-color: white;
-            border-radius: 12px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            overflow: hidden;
-        }
-        
-        .app-header {
-            padding: 20px;
-            background-color: #f8f9fa;
-            border-bottom: 1px solid #eaeaea;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        
-        .app-title {
-            font-size: 24px;
-            font-weight: 600;
-            color: #2d3748;
-        }
-        
-        .tabs {
-            display: flex;
-            border-bottom: 1px solid #e2e8f0;
-            background-color: #f8f9fa;
-        }
-        
-        .tab {
-            padding: 12px 20px;
-            cursor: pointer;
-            font-weight: 500;
-            color: #4a5568;
-            background-color: transparent;
-            border: none;
-            border-bottom: 2px solid transparent;
-        }
-        
-        .tab.active {
-            color: #3182ce;
-            border-bottom: 2px solid #3182ce;
-            background-color: white;
-        }
-        
-        .tab-content {
-            display: none;
-            padding: 20px;
-        }
-        
-        .tab-content.active {
-            display: block;
-        }
-        
-        button {
-            background-color: #4299e1;
-            color: white;
-            border: none;
-            padding: 8px 16px;
-            border-radius: 4px;
-            cursor: pointer;
-            font-weight: 500;
-        }
-        
-        button:hover {
-            background-color: #3182ce;
-        }
-        
-        button.secondary {
-            background-color: #e2e8f0;
-            color: #4a5568;
-        }
-        
-        button.secondary:hover {
-            background-color: #cbd5e0;
-        }
-        
-        button.danger {
-            background-color: #f56565;
-        }
-        
-        button.danger:hover {
-            background-color: #e53e3e;
-        }
-        
-        .form-group {
-            margin-bottom: 16px;
-        }
-        
-        label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 500;
-            color: #4a5568;
-        }
-        
-        input, select {
-            width: 100%;
-            padding: 8px 12px;
-            border: 1px solid #e2e8f0;
-            border-radius: 4px;
-            font-size: 16px;
-        }
-        
-        input:focus, select:focus {
-            outline: none;
-            border-color: #4299e1;
-            box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.15);
-        }
-        
-        .result-card {
-            margin-top: 20px;
-            padding: 16px;
-            background-color: #ebf8ff;
-            border-radius: 8px;
-            display: none;
-        }
-        
-        .result-card.active {
-            display: block;
-        }
-        
-        .result-title {
-            font-size: 18px;
-            font-weight: 600;
-            margin-bottom: 12px;
-        }
-        
-        .best-card {
-            font-size: 20px;
-            font-weight: 600;
-            margin-bottom: 8px;
-        }
-        
-        .reward-rate {
-            font-weight: 500;
-            margin-bottom: 8px;
-        }
-        
-        .reward-details {
-            color: #4a5568;
-        }
-        
-        .cards-list {
-            margin-top: 24px;
-        }
-        
-        .cards-title {
-            font-size: 20px;
-            font-weight: 600;
-            margin-bottom: 16px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        
-        .card-item {
-            margin-bottom: 12px;
-            border: 1px solid #e2e8f0;
-            border-radius: 8px;
-            overflow: hidden;
-        }
-        
-        .card-header {
-            padding: 16px;
-            background-color: #f8f9fa;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            cursor: pointer;
-        }
-        
-        .card-name {
-            font-weight: 600;
-        }
-        
-        .card-actions {
-            display: flex;
-            gap: 8px;
-        }
-        
-        .card-details {
-            padding: 16px;
-            border-top: 1px solid #e2e8f0;
-            display: none;
-        }
-        
-        .card-details.active {
-            display: block;
-        }
-        
-        .detail-section {
-            margin-bottom: 16px;
-        }
-        
-        .detail-title {
-            font-weight: 500;
-            color: #4a5568;
-            margin-bottom: 8px;
-        }
-        
-        .detail-list {
-            padding-left: 20px;
-        }
-        
-        .detail-list li {
-            margin-bottom: 4px;
-        }
-        
-        .reward-category {
-            display: flex;
-            margin-bottom: 8px;
-            align-items: center;
-        }
-        
-        .reward-category input {
-            margin-right: 8px;
-        }
-        
-        .reward-category input[type="number"] {
-            width: 60px;
-        }
-        
-        .reward-category button {
-            margin-left: 8px;
-        }
-        
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
-            z-index: 1000;
-        }
-        
-        .modal.active {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-        
-        .modal-content {
-            background-color: white;
-            padding: 24px;
-            border-radius: 8px;
-            width: 90%;
-            max-width: 500px;
-            max-height: 90vh;
-            overflow-y: auto;
-        }
-        
-        .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 16px;
-        }
-        
-        .modal-title {
-            font-size: 20px;
-            font-weight: 600;
-        }
-        
-        .modal-close {
-            background: none;
-            border: none;
-            font-size: 24px;
-            cursor: pointer;
-            color: #4a5568;
-        }
-        
-        .modal-footer {
-            margin-top: 24px;
-            display: flex;
-            justify-content: flex-end;
-            gap: 12px;
-        }
-        
-        .categories-section {
-            margin-top: 20px;
-        }
-        
-        .categories-title {
-            margin-bottom: 12px;
-            font-weight: 500;
-        }
-        
-        .btn-add-category {
-            margin-top: 8px;
-        }
-        
-        .notification {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            padding: 12px 20px;
-            background-color: #48bb78;
-            color: white;
-            border-radius: 4px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            display: none;
-            z-index: 1000;
-        }
-        
-        .notification.error {
-            background-color: #f56565;
-        }
-        
-        .notification.active {
-            display: block;
-            animation: fadeInOut 3s ease-in-out;
-        }
-        
-        @keyframes fadeInOut {
-            0% { opacity: 0; }
-            10% { opacity: 1; }
-            90% { opacity: 1; }
-            100% { opacity: 0; }
-        }
-        
-        @media (max-width: 640px) {
-            .container {
-                border-radius: 0;
-                box-shadow: none;
-            }
-            
-            body {
-                padding: 0;
-            }
-            
-            .modal-content {
-                width: 95%;
-            }
-        }
+/* Basic Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+/* Root Variables */
+:root {
+    --primary-color: #4299e1;
+    --primary-dark: #3182ce;
+    --success-color: #48bb78;
+    --success-light: #f0fff4;
+    --warning-color: #f6ad55;
+    --danger-color: #f56565;
+    --neutral-light: #f7fafc;
+    --neutral-medium: #e2e8f0;
+    --neutral-dark: #4a5568;
+    --font-primary: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+body {
+    background-color: var(--neutral-light);
+    font-family: var(--font-primary);
+    line-height: 1.6;
+    padding: 20px;
+}
+
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    background-color: white;
+    border-radius: 12px;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    overflow: hidden;
+}
+
+.app-header {
+    padding: 24px;
+    background: linear-gradient(to right, #3182ce, #4299e1);
+    border-bottom: 1px solid #eaeaea;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 12px 12px 0 0;
+}
+
+.app-title {
+    font-size: 28px;
+    font-weight: 700;
+    color: white;
+}
+
+.tabs {
+    display: flex;
+    border-bottom: 1px solid #e2e8f0;
+    background-color: #f8f9fa;
+}
+
+.tab {
+    padding: 14px 24px;
+    cursor: pointer;
+    font-weight: 600;
+    color: #4a5568;
+    background-color: transparent;
+    border: none;
+    border-bottom: 3px solid transparent;
+    transition: all 0.3s ease;
+}
+
+.tab.active {
+    color: var(--primary-dark);
+    border-bottom: 3px solid var(--primary-dark);
+    background-color: white;
+}
+
+.tab-content {
+    display: none;
+    padding: 20px;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+button {
+    background-color: #4299e1;
+    color: white;
+    border: none;
+    padding: 10px 18px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: transform 0.2s, box-shadow 0.2s;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.12);
+}
+
+button:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 6px rgba(0,0,0,0.12);
+    background-color: #3182ce;
+}
+
+button:active {
+    transform: translateY(1px);
+    box-shadow: 0 1px 2px rgba(0,0,0,0.12);
+}
+
+button.btn-secondary {
+    background-color: #e2e8f0;
+    color: #4a5568;
+}
+
+button.btn-secondary:hover {
+    background-color: #cbd5e0;
+}
+
+button.btn-danger {
+    background-color: #f56565;
+}
+
+button.btn-danger:hover {
+    background-color: #e53e3e;
+}
+
+.form-group {
+    margin-bottom: 16px;
+}
+
+label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+    color: #4a5568;
+}
+
+input, select {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    font-size: 16px;
+    transition: all 0.3s ease;
+}
+
+input:focus, select:focus {
+    outline: none;
+    border-color: #4299e1;
+    box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.15);
+}
+
+.result-card {
+    margin-top: 20px;
+    padding: 20px;
+    background-color: var(--success-light);
+    border-radius: 8px;
+    border-left: 5px solid var(--success-color);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    display: none;
+    animation: fadeIn 0.3s ease-out;
+}
+
+.result-card.active {
+    display: block;
+}
+
+.result-title {
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--neutral-dark);
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+}
+
+.result-title:before {
+    content: '🏆';
+    margin-right: 10px;
+    font-size: 24px;
+}
+
+.best-card {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--primary-dark);
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+}
+
+.best-card:before {
+    content: '💳';
+    margin-right: 10px;
+    font-size: 24px;
+}
+
+.reward-rate {
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--success-color);
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+}
+
+.reward-rate:before {
+    content: '💰';
+    margin-right: 10px;
+    font-size: 20px;
+}
+
+.reward-details {
+    color: #4a5568;
+    padding-left: 30px;
+}
+
+.cards-list {
+    margin-top: 24px;
+}
+
+.cards-title {
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.card-item {
+    margin-bottom: 16px;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: box-shadow 0.3s ease;
+}
+
+.card-item:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.card-header {
+    padding: 16px;
+    background-color: var(--neutral-light);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.card-header:hover {
+    background-color: var(--neutral-medium);
+}
+
+.card-name {
+    font-weight: 600;
+}
+
+.card-actions {
+    display: flex;
+    gap: 8px;
+}
+
+.card-details {
+    padding: 20px;
+    border-top: 1px solid #e2e8f0;
+    display: none;
+    background-color: white;
+}
+
+.card-details.active {
+    display: block;
+    animation: fadeIn 0.3s ease-out;
+}
+
+.detail-section {
+    margin-bottom: 16px;
+}
+
+.detail-title {
+    font-weight: 600;
+    color: var(--primary-dark);
+    margin-bottom: 10px;
+}
+
+.detail-list {
+    padding-left: 20px;
+}
+
+.detail-list li {
+    margin-bottom: 8px;
+    list-style-type: none;
+    position: relative;
+    padding-left: 24px;
+}
+
+.detail-list li:before {
+    content: '✓';
+    position: absolute;
+    left: 0;
+    color: var(--success-color);
+    font-weight: bold;
+}
+
+.reward-category {
+    display: flex;
+    margin-bottom: 12px;
+    align-items: center;
+}
+
+.reward-category input {
+    margin-right: 8px;
+}
+
+.reward-category input[type="number"] {
+    width: 60px;
+}
+
+.reward-category button {
+    margin-left: 8px;
+    padding: 6px 10px;
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+}
+
+.modal.active {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    background-color: white;
+    padding: 24px;
+    border-radius: 12px;
+    width: 90%;
+    max-width: 500px;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+    border-bottom: 1px solid var(--neutral-medium);
+    padding-bottom: 16px;
+}
+
+.modal-title {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--primary-dark);
+}
+
+.modal-close {
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    color: #4a5568;
+    box-shadow: none;
+}
+
+.modal-footer {
+    margin-top: 24px;
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+}
+
+.categories-section {
+    margin-top: 20px;
+}
+
+.categories-title {
+    margin-bottom: 12px;
+    font-weight: 500;
+}
+
+.btn-add-category {
+    margin-top: 8px;
+}
+
+.notification {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    padding: 12px 20px;
+    background-color: #48bb78;
+    color: white;
+    border-radius: 8px;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    font-weight: 600;
+    display: none;
+    z-index: 1000;
+}
+
+.notification.error {
+    background-color: #f56565;
+}
+
+.notification.active {
+    display: block;
+    animation: fadeInOut 3s ease-in-out;
+}
+
+@keyframes fadeInOut {
+    0% { opacity: 0; }
+    10% { opacity: 1; }
+    90% { opacity: 1; }
+    100% { opacity: 0; }
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.02); }
+    100% { transform: scale(1); }
+}
+
+.animate-result {
+    animation: pulse 0.5s ease-in-out;
+}
+
+.capitalize {
+    text-transform: capitalize;
+}
+
+@media (max-width: 640px) {
+    .container {
+        border-radius: 0;
+        box-shadow: none;
+    }
+    
+    body {
+        padding: 0;
+    }
+    
+    .modal-content {
+        width: 95%;
+    }
+}
     </style>
 </head>
 <body>
@@ -414,8 +522,8 @@
         
         <div class="tab-content" id="manage-tab">
             <div class="form-group">
-                <button id="add-card-button">Add New Card</button>
-                <button id="reset-cards-button" class="secondary">Reset to Default Cards</button>
+                <button id="add-card-button" class="btn-primary">Add New Card</button>
+                <button id="reset-cards-button" class="btn-secondary">Reset to Default Cards</button>
             </div>
             
             <div class="cards-list" id="cards-list-manage">
@@ -469,8 +577,8 @@
             </div>
             
             <div class="modal-footer">
-                <button class="secondary" id="cancel-button">Cancel</button>
-                <button id="save-card-button">Save Card</button>
+                <button class="btn-secondary" id="cancel-button">Cancel</button>
+                <button class="btn-primary" id="save-card-button">Save Card</button>
             </div>
         </div>
     </div>
@@ -479,35 +587,34 @@
         Card saved successfully!
     </div>
 
-    <script>
-        // DOM Elements
-        const categorySelect = document.getElementById('category-select');
-        const customCategoryGroup = document.getElementById('custom-category-group');
-        const customCategoryInput = document.getElementById('custom-category');
-        const resultCard = document.getElementById('result-card');
-        const resultCategory = document.getElementById('result-category');
-        const bestCardName = document.getElementById('best-card-name');
-        const rewardRate = document.getElementById('reward-rate');
-        const rewardDetails = document.getElementById('reward-details');
-        const tabs = document.querySelectorAll('.tab');
-        const tabContents = document.querySelectorAll('.tab-content');
-        const cardsListOptimize = document.getElementById('cards-list-optimize');
-        const cardsListManage = document.getElementById('cards-list-manage');
-        const addCardButton = document.getElementById('add-card-button');
-        const resetCardsButton = document.getElementById('reset-cards-button');
-        const cardModal = document.getElementById('card-modal');
-        const modalTitle = document.getElementById('modal-title');
-        const modalClose = document.getElementById('modal-close');
-        const cardNameInput = document.getElementById('card-name');
-        const annualFeeInput = document.getElementById('annual-fee');
-        const notesInput = document.getElementById('notes');
-        const rewardCategoriesContainer = document.getElementById('reward-categories-container');
-        const addCategoryButton = document.getElementById('add-category-button');
-        const saveCardButton = document.getElementById('save-card-button');
-        const cancelButton = document.getElementById('cancel-button');
-        const notification = document.getElementById('notification');
+    // DOM Elements
+const categorySelect = document.getElementById('category-select');
+const customCategoryGroup = document.getElementById('custom-category-group');
+const customCategoryInput = document.getElementById('custom-category');
+const resultCard = document.getElementById('result-card');
+const resultCategory = document.getElementById('result-category');
+const bestCardName = document.getElementById('best-card-name');
+const rewardRate = document.getElementById('reward-rate');
+const rewardDetails = document.getElementById('reward-details');
+const tabs = document.querySelectorAll('.tab');
+const tabContents = document.querySelectorAll('.tab-content');
+const cardsListOptimize = document.getElementById('cards-list-optimize');
+const cardsListManage = document.getElementById('cards-list-manage');
+const addCardButton = document.getElementById('add-card-button');
+const resetCardsButton = document.getElementById('reset-cards-button');
+const cardModal = document.getElementById('card-modal');
+const modalTitle = document.getElementById('modal-title');
+const modalClose = document.getElementById('modal-close');
+const cardNameInput = document.getElementById('card-name');
+const annualFeeInput = document.getElementById('annual-fee');
+const notesInput = document.getElementById('notes');
+const rewardCategoriesContainer = document.getElementById('reward-categories-container');
+const addCategoryButton = document.getElementById('add-category-button');
+const saveCardButton = document.getElementById('save-card-button');
+const cancelButton = document.getElementById('cancel-button');
+const notification = document.getElementById('notification');
 
-        // Default Credit Card Data
+// Default Credit Card Data
 const defaultCards = [
     {
         id: 'chase-sapphire-reserve',
@@ -690,26 +797,144 @@ const defaultCards = [
     }
 ];
 
-        // Add a preselected card to the modal
+    // Category mapping
+const categoryMap = {
+    'restaurants': 'restaurants',
+    'dining': 'restaurants',
+    'food': 'restaurants',
+    'uber eats': 'restaurants',
+    'doordash': 'restaurants',
+    
+    'travel': 'travel',
+    'flight': 'airfare',
+    'flights': 'airfare',
+    'airplane': 'airfare',
+    'air': 'airfare',
+    'hotel': 'hotels',
+    'lodging': 'hotels',
+    'car rental': 'car rentals',
+    'car rentals': 'car rentals',
+    'train': 'transit',
+    'subway': 'transit',
+    'bus': 'transit',
+    'taxi': 'transit',
+    'uber': 'transit',
+    'lyft': 'transit',
+    
+    'gas': 'gas stations',
+    'fuel': 'gas stations',
+    'petrol': 'gas stations',
+    
+    'amazon': 'amazon',
+    'amazon.com': 'amazon',
+    'amazon fresh': 'amazon',
+    
+    'whole foods': 'whole foods',
+    
+    'costco': 'costco',
+    'costco gas': 'costco gas',
+    
+    'grocery': 'grocery',
+    'groceries': 'grocery',
+    'supermarket': 'grocery',
+    
+    'streaming': 'streaming services',
+    'netflix': 'streaming services',
+    'hulu': 'streaming services',
+    'spotify': 'streaming services',
+    
+    'electric vehicle charging': 'ev charging',
+    'ev charging': 'ev charging',
+    
+    'general': 'general',
+    'other': 'general',
+};
+
+// State variables
+let cardsData = [];
+let editingCardId = null;
+
+// Initialize the app
+function initApp() {
+    // Load cards from localStorage or use defaults
+    loadCards();
+    
+    // Render cards
+    renderCardsOptimize();
+    renderCardsManage();
+    
+    // Add event listeners
+    categorySelect.addEventListener('change', handleCategoryChange);
+    customCategoryInput.addEventListener('input', handleCustomCategoryInput);
+    
+    tabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+            switchTab(tab.getAttribute('data-tab'));
+        });
+    });
+    
+    addCardButton.addEventListener('click', openAddCardModal);
+    resetCardsButton.addEventListener('click', resetToDefaultCards);
+    modalClose.addEventListener('click', closeModal);
+    addCategoryButton.addEventListener('click', addRewardCategory);
+    saveCardButton.addEventListener('click', saveCard);
+    cancelButton.addEventListener('click', closeModal);
+}
+
+// Load cards from localStorage or use defaults
+function loadCards() {
+    const savedCards = localStorage.getItem('creditCards');
+    if (savedCards) {
+        cardsData = JSON.parse(savedCards);
+    } else {
+        cardsData = [...defaultCards];
+        saveCardsToStorage();
+    }
+}
+
+// Save cards to localStorage
+function saveCardsToStorage() {
+    localStorage.setItem('creditCards', JSON.stringify(cardsData));
+}
+
+// Reset to default cards
+function resetToDefaultCards() {
+    if (confirm('Are you sure you want to reset to default cards? This will remove any custom cards you\'ve added.')) {
+        cardsData = [...defaultCards];
+        saveCardsToStorage();
+        renderCardsOptimize();
+        renderCardsManage();
+        showNotification('Cards reset to defaults');
+    }
+}
+
+// Add a preselected card to the modal
 function populateCardFromPreset() {
     const selectCardDropdown = document.getElementById('preset-card-select');
     
-    // Clear existing options and add the default 'Custom Card' option
-    selectCardDropdown.innerHTML = '<option value="">Custom Card</option>';
+    // Only populate if empty to avoid clearing the selection
+    if (selectCardDropdown.options.length <= 1) {
+        // Clear existing options and add the default 'Custom Card' option
+        selectCardDropdown.innerHTML = '<option value="">Custom Card</option>';
+        
+        // Add all default cards as options
+        defaultCards.forEach(card => {
+            // Skip cards that are already in the user's collection
+            if (!cardsData.some(c => c.id === card.id)) {
+                const option = document.createElement('option');
+                option.value = card.id;
+                option.textContent = card.name;
+                selectCardDropdown.appendChild(option);
+            }
+        });
+    }
     
-    // Add all default cards as options
-    defaultCards.forEach(card => {
-        // Skip cards that are already in the user's collection
-        if (!cardsData.some(c => c.id === card.id)) {
-            const option = document.createElement('option');
-            option.value = card.id;
-            option.textContent = card.name;
-            selectCardDropdown.appendChild(option);
-        }
-    });
+    // Remove previous event listeners by cloning and replacing
+    const newSelect = selectCardDropdown.cloneNode(true);
+    selectCardDropdown.parentNode.replaceChild(newSelect, selectCardDropdown);
     
     // Add event listener for changes
-    selectCardDropdown.addEventListener('change', function() {
+    newSelect.addEventListener('change', function() {
         const selectedCardId = this.value;
         if (selectedCardId) {
             // Find the selected card
@@ -739,200 +964,88 @@ function populateCardFromPreset() {
     });
 }
 
-        // Category mapping
-        const categoryMap = {
-            'restaurants': 'restaurants',
-            'dining': 'restaurants',
-            'food': 'restaurants',
-            'uber eats': 'restaurants',
-            'doordash': 'restaurants',
-            
-            'travel': 'travel',
-            'flight': 'airfare',
-            'flights': 'airfare',
-            'airplane': 'airfare',
-            'air': 'airfare',
-            'hotel': 'hotels',
-            'lodging': 'hotels',
-            'car rental': 'car rentals',
-            'car rentals': 'car rentals',
-            'train': 'transit',
-            'subway': 'transit',
-            'bus': 'transit',
-            'taxi': 'transit',
-            'uber': 'transit',
-            'lyft': 'transit',
-            
-            'gas': 'gas stations',
-            'fuel': 'gas stations',
-            'petrol': 'gas stations',
-            
-            'amazon': 'amazon',
-            'amazon.com': 'amazon',
-            'amazon fresh': 'amazon',
-            
-            'whole foods': 'whole foods',
-            
-            'costco': 'costco',
-            'costco gas': 'costco gas',
-            
-            'grocery': 'grocery',
-            'groceries': 'grocery',
-            'supermarket': 'grocery',
-            
-            'streaming': 'streaming services',
-            'netflix': 'streaming services',
-            'hulu': 'streaming services',
-            'spotify': 'streaming services',
-            
-            'electric vehicle charging': 'ev charging',
-            'ev charging': 'ev charging',
-            
-            'general': 'general',
-            'other': 'general',
-        };
-
-        // State variables
-        let cardsData = [];
-        let editingCardId = null;
-
-        // Initialize the app
-        function initApp() {
-            // Load cards from localStorage or use defaults
-            loadCards();
-            
-            // Render cards
-            renderCardsOptimize();
-            renderCardsManage();
-            
-            // Add event listeners
-            categorySelect.addEventListener('change', handleCategoryChange);
-            customCategoryInput.addEventListener('input', handleCustomCategoryInput);
-            
-            tabs.forEach(tab => {
-                tab.addEventListener('click', () => {
-                    switchTab(tab.getAttribute('data-tab'));
-                });
-            });
-            
-            addCardButton.addEventListener('click', openAddCardModal);
-            resetCardsButton.addEventListener('click', resetToDefaultCards);
-            modalClose.addEventListener('click', closeModal);
-            addCategoryButton.addEventListener('click', addRewardCategory);
-            saveCardButton.addEventListener('click', saveCard);
-            cancelButton.addEventListener('click', closeModal);
-        }
-
-        // Load cards from localStorage or use defaults
-        function loadCards() {
-            const savedCards = localStorage.getItem('creditCards');
-            if (savedCards) {
-                cardsData = JSON.parse(savedCards);
-            } else {
-                cardsData = [...defaultCards];
-                saveCardsToStorage();
-            }
-        }
-
-        // Save cards to localStorage
-        function saveCardsToStorage() {
-            localStorage.setItem('creditCards', JSON.stringify(cardsData));
-        }
-
-        // Reset to default cards
-        function resetToDefaultCards() {
-            if (confirm('Are you sure you want to reset to default cards? This will remove any custom cards you\'ve added.')) {
-                cardsData = [...defaultCards];
-                saveCardsToStorage();
-                renderCardsOptimize();
-                renderCardsManage();
-                showNotification('Cards reset to defaults');
-            }
-        }
-
-        // Render cards in the optimize tab
-        function renderCardsOptimize() {
-            cardsListOptimize.innerHTML = '<h2 class="cards-title">Your Cards</h2>';
-            
-            cardsData.forEach(card => {
-                const cardElement = document.createElement('div');
-                cardElement.className = 'card-item';
-                cardElement.innerHTML = `
-                    <div class="card-header" data-card="${card.id}">
-                        <span class="card-name">${card.name}</span>
-                        <span>▼</span>
-                    </div>
-                    <div class="card-details" id="${card.id}-details">
-                        <div class="detail-section">
-                            <h4 class="detail-title">Reward Categories:</h4>
-                            <ul class="detail-list">
-                                ${Object.entries(card.categories).map(([category, details]) => 
-                                    `<li><span class="capitalize">${category}:</span> ${details.rate}x - ${details.details}</li>`
-                                ).join('')}
-                            </ul>
-                        </div>
-                        
-                        <div class="detail-section">
-                            <h4 class="detail-title">Annual Fee:</h4>
-                            <p>$${card.annualFee}</p>
-                        </div>
-                        
-                        ${card.notes ? `
-                        <div class="detail-section">
-                            <h4 class="detail-title">Notes:</h4>
-                            <p>${card.notes}</p>
-                        </div>
-                        ` : ''}
-                    </div>
-                `;
-                cardsListOptimize.appendChild(cardElement);
+        // Enhanced renderCardsOptimize function
+function renderCardsOptimize() {
+    cardsListOptimize.innerHTML = '<h2 class="cards-title">Your Cards</h2>';
+    
+    cardsData.forEach(card => {
+        const cardElement = document.createElement('div');
+        cardElement.className = 'card-item';
+        cardElement.innerHTML = `
+            <div class="card-header" data-card="${card.id}">
+                <span class="card-name">${card.name}</span>
+                <span class="chevron-icon">▼</span>
+            </div>
+            <div class="card-details" id="${card.id}-details">
+                <div class="detail-section">
+                    <h4 class="detail-title">Reward Categories:</h4>
+                    <ul class="detail-list">
+                        ${Object.entries(card.categories).map(([category, details]) => 
+                            `<li><span class="capitalize">${category}:</span> ${details.rate}x - ${details.details}</li>`
+                        ).join('')}
+                    </ul>
+                </div>
                 
-                // Add click event to toggle details
-                const cardHeader = cardElement.querySelector('.card-header');
-                cardHeader.addEventListener('click', () => {
-                    const cardId = cardHeader.getAttribute('data-card');
-                    toggleCardDetails(cardId);
-                    toggleChevron(cardHeader.querySelector('span'));
-                });
-            });
-        }
+                <div class="detail-section">
+                    <h4 class="detail-title">Annual Fee:</h4>
+                    <p>$${card.annualFee}</p>
+                </div>
+                
+                ${card.notes ? `
+                <div class="detail-section">
+                    <h4 class="detail-title">Notes:</h4>
+                    <p>${card.notes}</p>
+                </div>
+                ` : ''}
+            </div>
+        `;
+        cardsListOptimize.appendChild(cardElement);
+        
+        // Add click event to toggle details
+        const cardHeader = cardElement.querySelector('.card-header');
+        cardHeader.addEventListener('click', () => {
+            const cardId = cardHeader.getAttribute('data-card');
+            toggleCardDetails(cardId);
+            toggleChevron(cardHeader.querySelector('.chevron-icon'));
+        });
+    });
+}
 
-        // Render cards in the manage tab
-        function renderCardsManage() {
-            cardsListManage.innerHTML = '<h2 class="cards-title">Your Cards</h2>';
-            
-            cardsData.forEach(card => {
-                const cardElement = document.createElement('div');
-                cardElement.className = 'card-item';
-                cardElement.innerHTML = `
-                    <div class="card-header">
-                        <span class="card-name">${card.name}</span>
-                        <div class="card-actions">
-                            <button class="edit-card secondary" data-id="${card.id}">Edit</button>
-                            <button class="delete-card danger" data-id="${card.id}">Delete</button>
-                        </div>
-                    </div>
-                `;
-                cardsListManage.appendChild(cardElement);
-                
-                // Add event listeners for edit and delete buttons
-                const editButton = cardElement.querySelector('.edit-card');
-                const deleteButton = cardElement.querySelector('.delete-card');
-                
-                editButton.addEventListener('click', (e) => {
-                    e.stopPropagation();
-                    openEditCardModal(card.id);
-                });
-                
-                deleteButton.addEventListener('click', (e) => {
-                    e.stopPropagation();
-                    deleteCard(card.id);
-                });
-            });
-        }
+// Enhanced renderCardsManage function
+function renderCardsManage() {
+    cardsListManage.innerHTML = '<h2 class="cards-title">Your Cards</h2>';
+    
+    cardsData.forEach(card => {
+        const cardElement = document.createElement('div');
+        cardElement.className = 'card-item';
+        cardElement.innerHTML = `
+            <div class="card-header">
+                <span class="card-name">${card.name}</span>
+                <div class="card-actions">
+                    <button class="edit-card btn-secondary" data-id="${card.id}">Edit</button>
+                    <button class="delete-card btn-danger" data-id="${card.id}">Delete</button>
+                </div>
+            </div>
+        `;
+        cardsListManage.appendChild(cardElement);
+        
+        // Add event listeners for edit and delete buttons
+        const editButton = cardElement.querySelector('.edit-card');
+        const deleteButton = cardElement.querySelector('.delete-card');
+        
+        editButton.addEventListener('click', (e) => {
+            e.stopPropagation();
+            openEditCardModal(card.id);
+        });
+        
+        deleteButton.addEventListener('click', (e) => {
+            e.stopPropagation();
+            deleteCard(card.id);
+        });
+    });
+}
 
-        // Open modal to add a new card
-        // Open modal to add a new card
+// Open modal to add a new card
 function openAddCardModal() {
     modalTitle.textContent = 'Add Credit Card';
     cardNameInput.value = '';
@@ -950,266 +1063,269 @@ function openAddCardModal() {
     cardModal.classList.add('active');
 }
 
-        // Open modal to edit an existing card
-        function openEditCardModal(cardId) {
-            const card = cardsData.find(c => c.id === cardId);
-            if (!card) return;
-            
-            modalTitle.textContent = 'Edit Credit Card';
-            cardNameInput.value = card.name;
-            annualFeeInput.value = card.annualFee;
-            notesInput.value = card.notes || '';
-            rewardCategoriesContainer.innerHTML = '';
-            
-            // Add existing categories
-            Object.entries(card.categories).forEach(([category, details]) => {
-                addRewardCategory(category, details.rate, details.details);
-            });
-            
-            editingCardId = cardId;
-            cardModal.classList.add('active');
-        }
+// Open modal to edit an existing card
+function openEditCardModal(cardId) {
+    const card = cardsData.find(c => c.id === cardId);
+    if (!card) return;
+    
+    modalTitle.textContent = 'Edit Credit Card';
+    cardNameInput.value = card.name;
+    annualFeeInput.value = card.annualFee;
+    notesInput.value = card.notes || '';
+    rewardCategoriesContainer.innerHTML = '';
+    
+    // Add existing categories
+    Object.entries(card.categories).forEach(([category, details]) => {
+        addRewardCategory(category, details.rate, details.details);
+    });
+    
+    editingCardId = cardId;
+    cardModal.classList.add('active');
+}
 
-        // Add a new reward category input row
-        function addRewardCategory(category = '', rate = 1, details = '') {
-            const categoryRow = document.createElement('div');
-            categoryRow.className = 'reward-category';
-            categoryRow.innerHTML = `
-                <input type="text" placeholder="Category" class="category-name" value="${category}">
-                <input type="number" min="1" max="100" value="${rate}" class="category-rate">
-                <span>x</span>
-                <input type="text" placeholder="Details" class="category-details" value="${details}">
-                <button class="remove-category secondary">-</button>
-            `;
-            rewardCategoriesContainer.appendChild(categoryRow);
-            
-            // Add event listener to remove button
-            const removeButton = categoryRow.querySelector('.remove-category');
-            removeButton.addEventListener('click', (e) => {
-                e.preventDefault();
-                categoryRow.remove();
-            });
+// Add a new reward category input row
+function addRewardCategory(category = '', rate = 1, details = '') {
+    const categoryRow = document.createElement('div');
+    categoryRow.className = 'reward-category';
+    categoryRow.innerHTML = `
+        <input type="text" placeholder="Category" class="category-name" value="${category}">
+        <input type="number" min="1" max="100" value="${rate}" class="category-rate">
+        <span>x</span>
+        <input type="text" placeholder="Details" class="category-details" value="${details}">
+        <button class="remove-category btn-secondary">-</button>
+    `;
+    rewardCategoriesContainer.appendChild(categoryRow);
+    
+    // Add event listener to remove button
+    const removeButton = categoryRow.querySelector('.remove-category');
+    removeButton.addEventListener('click', (e) => {
+        e.preventDefault();
+        categoryRow.remove();
+    });
+}
+
+// Handle category selection changes
+function handleCategoryChange() {
+    const selectedCategory = categorySelect.value;
+    
+    // Show/hide custom category input
+    if (selectedCategory === 'Other') {
+        customCategoryGroup.style.display = 'block';
+        if (customCategoryInput.value) {
+            updateResult(customCategoryInput.value);
+        } else {
+            resultCard.style.display = 'none';
         }
+    } else {
+        customCategoryGroup.style.display = 'none';
+        if (selectedCategory) {
+            updateResult(selectedCategory);
+        } else {
+            resultCard.style.display = 'none';
+        }
+    }
+}
+
+// Handle custom category input
+function handleCustomCategoryInput() {
+    if (customCategoryInput.value) {
+        updateResult(customCategoryInput.value);
+    } else {
+        resultCard.style.display = 'none';
+    }
+}
+
+// Switch tabs
+function switchTab(tabId) {
+    tabs.forEach(tab => {
+        tab.classList.remove('active');
+        if (tab.getAttribute('data-tab') === tabId) {
+            tab.classList.add('active');
+        }
+    });
+    
+    tabContents.forEach(content => {
+        content.classList.remove('active');
+        if (content.id === tabId + '-tab') {
+            content.classList.add('active');
+        }
+    });
+}
 
         // Save a card (new or edited)
-        function saveCard() {
-            const name = cardNameInput.value.trim();
-            const annualFee = parseInt(annualFeeInput.value) || 0;
-            const notes = notesInput.value.trim();
-            
-            if (!name) {
-                alert('Please enter a card name');
-                return;
-            }
-            
-            // Get all category inputs
-            const categoryRows = rewardCategoriesContainer.querySelectorAll('.reward-category');
-            const categories = {};
-            
-            for (const row of categoryRows) {
-                const categoryName = row.querySelector('.category-name').value.trim().toLowerCase();
-                const rate = parseInt(row.querySelector('.category-rate').value) || 1;
-                const details = row.querySelector('.category-details').value.trim();
-                
-                if (categoryName) {
-                    categories[categoryName] = { rate, details };
-                }
-            }
-            
-            if (Object.keys(categories).length === 0) {
-                alert('Please add at least one reward category');
-                return;
-            }
-            
-            // Make sure there's a general/default category
-            if (!categories['general']) {
-                categories['general'] = { rate: 1, details: '1x on all other purchases' };
-            }
-            
-            // Create or update card
-            if (editingCardId) {
-                // Update existing card
-                const index = cardsData.findIndex(c => c.id === editingCardId);
-                if (index !== -1) {
-                    cardsData[index] = {
-                        ...cardsData[index],
-                        name,
-                        annualFee,
-                        notes,
-                        categories
-                    };
-                }
-            } else {
-                // Add new card
-                const newCard = {
-                    id: 'card-' + Date.now(),
-                    name,
-                    annualFee,
-                    notes,
-                    categories
-                };
-                cardsData.push(newCard);
-            }
-            
-            // Save to localStorage and update UI
-            saveCardsToStorage();
-            renderCardsOptimize();
-            renderCardsManage();
-            
-            closeModal();
-            showNotification(editingCardId ? 'Card updated successfully' : 'Card added successfully');
+function saveCard() {
+    const name = cardNameInput.value.trim();
+    const annualFee = parseInt(annualFeeInput.value) || 0;
+    const notes = notesInput.value.trim();
+    
+    if (!name) {
+        alert('Please enter a card name');
+        return;
+    }
+    
+    // Get all category inputs
+    const categoryRows = rewardCategoriesContainer.querySelectorAll('.reward-category');
+    const categories = {};
+    
+    for (const row of categoryRows) {
+        const categoryName = row.querySelector('.category-name').value.trim().toLowerCase();
+        const rate = parseInt(row.querySelector('.category-rate').value) || 1;
+        const details = row.querySelector('.category-details').value.trim();
+        
+        if (categoryName) {
+            categories[categoryName] = { rate, details };
         }
-
-        // Delete a card
-        function deleteCard(cardId) {
-            if (cardsData.length <= 1) {
-                alert('You must have at least one credit card');
-                return;
-            }
-            
-            if (confirm('Are you sure you want to delete this card?')) {
-                cardsData = cardsData.filter(card => card.id !== cardId);
-                saveCardsToStorage();
-                renderCardsOptimize();
-                renderCardsManage();
-                showNotification('Card deleted successfully');
-            }
+    }
+    
+    if (Object.keys(categories).length === 0) {
+        alert('Please add at least one reward category');
+        return;
+    }
+    
+    // Make sure there's a general/default category
+    if (!categories['general']) {
+        categories['general'] = { rate: 1, details: '1x on all other purchases' };
+    }
+    
+    // Create or update card
+    if (editingCardId) {
+        // Update existing card
+        const index = cardsData.findIndex(c => c.id === editingCardId);
+        if (index !== -1) {
+            cardsData[index] = {
+                ...cardsData[index],
+                name,
+                annualFee,
+                notes,
+                categories
+            };
         }
+    } else {
+        // Add new card
+        const newCard = {
+            id: 'card-' + Date.now(),
+            name,
+            annualFee,
+            notes,
+            categories
+        };
+        cardsData.push(newCard);
+    }
+    
+    // Save to localStorage and update UI
+    saveCardsToStorage();
+    renderCardsOptimize();
+    renderCardsManage();
+    
+    closeModal();
+    showNotification(editingCardId ? 'Card updated successfully' : 'Card added successfully');
+}
 
-        // Close the modal
-        function closeModal() {
-            cardModal.classList.remove('active');
-            editingCardId = null;
-        }
+// Delete a card
+function deleteCard(cardId) {
+    if (cardsData.length <= 1) {
+        alert('You must have at least one credit card');
+        return;
+    }
+    
+    if (confirm('Are you sure you want to delete this card?')) {
+        cardsData = cardsData.filter(card => card.id !== cardId);
+        saveCardsToStorage();
+        renderCardsOptimize();
+        renderCardsManage();
+        showNotification('Card deleted successfully');
+    }
+}
 
-        // Show a notification
-        function showNotification(message, isError = false) {
-            notification.textContent = message;
-            notification.classList.remove('error');
-            
-            if (isError) {
-                notification.classList.add('error');
-            }
-            
-            notification.classList.add('active');
-            
-            setTimeout(() => {
-                notification.classList.remove('active');
-            }, 3000);
-        }
+// Close the modal
+function closeModal() {
+    cardModal.classList.remove('active');
+    editingCardId = null;
+}
 
-        // Switch tabs
-        function switchTab(tabId) {
-            tabs.forEach(tab => {
-                tab.classList.remove('active');
-                if (tab.getAttribute('data-tab') === tabId) {
-                    tab.classList.add('active');
-                }
-            });
-            
-            tabContents.forEach(content => {
-                content.classList.remove('active');
-                if (content.id === tabId + '-tab') {
-                    content.classList.add('active');
-                }
-            });
-        }
+// Show a notification
+function showNotification(message, isError = false) {
+    notification.textContent = message;
+    notification.classList.remove('error');
+    
+    if (isError) {
+        notification.classList.add('error');
+    }
+    
+    notification.classList.add('active');
+    
+    setTimeout(() => {
+        notification.classList.remove('active');
+    }, 3000);
+}
 
-        // Handle category selection changes
-        function handleCategoryChange() {
-            const selectedCategory = categorySelect.value;
-            
-            // Show/hide custom category input
-            if (selectedCategory === 'Other') {
-                customCategoryGroup.style.display = 'block';
-                if (customCategoryInput.value) {
-                    updateResult(customCategoryInput.value);
-                } else {
-                    resultCard.style.display = 'none';
-                }
-            } else {
-                customCategoryGroup.style.display = 'none';
-                if (selectedCategory) {
-                    updateResult(selectedCategory);
-                } else {
-                    resultCard.style.display = 'none';
-                }
+// Enhanced updateResult function to improve display
+function updateResult(category) {
+    const searchCategory = category.toLowerCase();
+    
+    // Try to map the search category to a standard category
+    const mappedCategory = categoryMap[searchCategory] || searchCategory;
+    
+    // Find the best card for this category
+    let bestCard = null;
+    let bestRate = 0;
+    let bestDetails = '';
+    
+    cardsData.forEach(card => {
+        // Check each category in the card
+        for (const [cardCategory, details] of Object.entries(card.categories)) {
+            // Check if this category matches or is an alias
+            if ((cardCategory === mappedCategory || categoryMap[cardCategory] === mappedCategory) && details.rate > bestRate) {
+                bestCard = card.name;
+                bestRate = details.rate;
+                bestDetails = details.details;
             }
         }
-
-        // Handle custom category input
-        function handleCustomCategoryInput() {
-            if (customCategoryInput.value) {
-                updateResult(customCategoryInput.value);
-            } else {
-                resultCard.style.display = 'none';
-            }
+        
+        // If no specific category match found, check for general rate
+        if (!bestCard && card.categories.general && (bestRate === 0 || card.categories.general.rate > bestRate)) {
+            bestCard = card.name;
+            bestRate = card.categories.general.rate;
+            bestDetails = card.categories.general.details;
         }
+    });
+    
+    // Update the UI
+    if (bestCard) {
+        resultCategory.textContent = category;
+        bestCardName.textContent = bestCard;
+        rewardRate.textContent = bestRate + 'x rewards';
+        rewardDetails.textContent = bestDetails;
+        resultCard.style.display = 'block';
+        
+        // Add animation effect
+        resultCard.classList.add('animate-result');
+        setTimeout(() => {
+            resultCard.classList.remove('animate-result');
+        }, 500);
+    } else {
+        resultCard.style.display = 'none';
+    }
+}
 
-        // Find the best card for a given category and update the result
-        function updateResult(category) {
-            const searchCategory = category.toLowerCase();
-            
-            // Try to map the search category to a standard category
-            const mappedCategory = categoryMap[searchCategory] || searchCategory;
-            
-            // Find the best card for this category
-            let bestCard = null;
-            let bestRate = 0;
-            let bestDetails = '';
-            
-            cardsData.forEach(card => {
-                // Check each category in the card
-                for (const [cardCategory, details] of Object.entries(card.categories)) {
-                    // Check if this category matches or is an alias
-                    if ((cardCategory === mappedCategory || categoryMap[cardCategory] === mappedCategory) && details.rate > bestRate) {
-                        bestCard = card.name;
-                        bestRate = details.rate;
-                        bestDetails = details.details;
-                    }
-                }
-                
-                // If no specific category match found, check for general rate
-                if (!bestCard && card.categories.general && (bestRate === 0 || card.categories.general.rate > bestRate)) {
-                    bestCard = card.name;
-                    bestRate = card.categories.general.rate;
-                    bestDetails = card.categories.general.details;
-                }
-            });
-            
-            // Update the UI
-            if (bestCard) {
-                resultCategory.textContent = category;
-                bestCardName.textContent = bestCard;
-                rewardRate.textContent = bestRate + 'x rewards';
-                rewardDetails.textContent = bestDetails;
-                resultCard.style.display = 'block';
-            } else {
-                resultCard.style.display = 'none';
-            }
+// Toggle card details
+function toggleCardDetails(cardId) {
+    const detailsElement = document.getElementById(cardId + '-details');
+    if (detailsElement) {
+        detailsElement.classList.toggle('active');
+    }
+}
+
+// Updated toggle chevron function
+function toggleChevron(chevronElement) {
+    if (chevronElement) {
+        if (chevronElement.textContent === '▼') {
+            chevronElement.textContent = '▲';
+        } else {
+            chevronElement.textContent = '▼';
         }
+    }
+}
 
-        // Toggle card details
-        function toggleCardDetails(cardId) {
-            const detailsElement = document.getElementById(cardId + '-details');
-            if (detailsElement) {
-                detailsElement.classList.toggle('active');
-            }
-        }
-
-        // Toggle chevron icon
-        function toggleChevron(chevronElement) {
-            if (chevronElement) {
-                if (chevronElement.textContent === '▼') {
-                    chevronElement.textContent = '▲';
-                } else {
-                    chevronElement.textContent = '▼';
-                }
-            }
-        }
-
-        // Initialize the app
-        document.addEventListener('DOMContentLoaded', initApp);
-    </script>
-</body>
-</html>
+// Initialize the app when the document is fully loaded
+document.addEventListener('DOMContentLoaded', initApp);
