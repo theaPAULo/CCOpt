@@ -18,7 +18,6 @@
             color: #333;
             line-height: 1.6;
             padding: 20px;
-            min-height: 100vh;
         }
         
         .container {
@@ -45,51 +44,70 @@
             color: #2d3748;
         }
         
-        .info-icon {
+        .tabs {
+            display: flex;
+            border-bottom: 1px solid #e2e8f0;
+            background-color: #f8f9fa;
+        }
+        
+        .tab {
+            padding: 12px 20px;
             cursor: pointer;
-            color: #4299e1;
-            width: 24px;
-            height: 24px;
+            font-weight: 500;
+            color: #4a5568;
+            background-color: transparent;
+            border: none;
+            border-bottom: 2px solid transparent;
         }
         
-        .info-panel {
-            margin-top: 16px;
-            padding: 16px;
-            background-color: #ebf8ff;
-            border-radius: 8px;
+        .tab.active {
+            color: #3182ce;
+            border-bottom: 2px solid #3182ce;
+            background-color: white;
+        }
+        
+        .tab-content {
             display: none;
+            padding: 20px;
         }
         
-        .info-panel.active {
+        .tab-content.active {
             display: block;
         }
         
-        .info-panel h2 {
-            font-weight: 600;
-            font-size: 18px;
-            margin-bottom: 8px;
-        }
-        
-        .info-panel p {
-            margin-bottom: 8px;
-        }
-        
-        .info-panel button {
-            margin-top: 12px;
-            padding: 6px 12px;
-            background: none;
+        button {
+            background-color: #4299e1;
+            color: white;
             border: none;
-            color: #4299e1;
+            padding: 8px 16px;
+            border-radius: 4px;
             cursor: pointer;
             font-weight: 500;
         }
         
-        .app-body {
-            padding: 20px;
+        button:hover {
+            background-color: #3182ce;
+        }
+        
+        button.secondary {
+            background-color: #e2e8f0;
+            color: #4a5568;
+        }
+        
+        button.secondary:hover {
+            background-color: #cbd5e0;
+        }
+        
+        button.danger {
+            background-color: #f56565;
+        }
+        
+        button.danger:hover {
+            background-color: #e53e3e;
         }
         
         .form-group {
-            margin-bottom: 20px;
+            margin-bottom: 16px;
         }
         
         label {
@@ -99,27 +117,24 @@
             color: #4a5568;
         }
         
-        select,
-        input {
+        input, select {
             width: 100%;
-            padding: 10px 12px;
+            padding: 8px 12px;
             border: 1px solid #e2e8f0;
-            border-radius: 8px;
+            border-radius: 4px;
             font-size: 16px;
-            outline: none;
-            transition: border-color 0.3s;
         }
         
-        select:focus,
-        input:focus {
+        input:focus, select:focus {
+            outline: none;
             border-color: #4299e1;
             box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.15);
         }
         
         .result-card {
-            margin-top: 24px;
+            margin-top: 20px;
             padding: 16px;
-            background-color: #f0fff4;
+            background-color: #ebf8ff;
             border-radius: 8px;
             display: none;
         }
@@ -131,51 +146,35 @@
         .result-title {
             font-size: 18px;
             font-weight: 600;
-            display: flex;
-            align-items: center;
             margin-bottom: 12px;
         }
         
-        .icon {
-            margin-right: 8px;
-        }
-        
         .best-card {
-            margin-top: 12px;
-            display: flex;
-            align-items: center;
-        }
-        
-        .best-card-name {
             font-size: 20px;
             font-weight: 600;
-            margin-left: 8px;
+            margin-bottom: 8px;
         }
         
         .reward-rate {
-            margin-top: 8px;
-            display: flex;
-            align-items: center;
-        }
-        
-        .reward-rate-value {
             font-weight: 500;
-            margin-left: 8px;
+            margin-bottom: 8px;
         }
         
         .reward-details {
-            margin-top: 8px;
             color: #4a5568;
         }
         
         .cards-list {
-            margin-top: 32px;
+            margin-top: 24px;
         }
         
         .cards-title {
             font-size: 20px;
             font-weight: 600;
             margin-bottom: 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
         
         .card-item {
@@ -196,6 +195,11 @@
         
         .card-name {
             font-weight: 600;
+        }
+        
+        .card-actions {
+            display: flex;
+            gap: 8px;
         }
         
         .card-details {
@@ -226,13 +230,118 @@
             margin-bottom: 4px;
         }
         
-        .no-bullet {
-            list-style-type: none;
-            padding-left: 0;
+        .reward-category {
+            display: flex;
+            margin-bottom: 8px;
+            align-items: center;
         }
         
-        .capitalize {
-            text-transform: capitalize;
+        .reward-category input {
+            margin-right: 8px;
+        }
+        
+        .reward-category input[type="number"] {
+            width: 60px;
+        }
+        
+        .reward-category button {
+            margin-left: 8px;
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+        }
+        
+        .modal.active {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .modal-content {
+            background-color: white;
+            padding: 24px;
+            border-radius: 8px;
+            width: 90%;
+            max-width: 500px;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+        
+        .modal-title {
+            font-size: 20px;
+            font-weight: 600;
+        }
+        
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #4a5568;
+        }
+        
+        .modal-footer {
+            margin-top: 24px;
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+        }
+        
+        .categories-section {
+            margin-top: 20px;
+        }
+        
+        .categories-title {
+            margin-bottom: 12px;
+            font-weight: 500;
+        }
+        
+        .btn-add-category {
+            margin-top: 8px;
+        }
+        
+        .notification {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            padding: 12px 20px;
+            background-color: #48bb78;
+            color: white;
+            border-radius: 4px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            display: none;
+            z-index: 1000;
+        }
+        
+        .notification.error {
+            background-color: #f56565;
+        }
+        
+        .notification.active {
+            display: block;
+            animation: fadeInOut 3s ease-in-out;
+        }
+        
+        @keyframes fadeInOut {
+            0% { opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { opacity: 0; }
         }
         
         @media (max-width: 640px) {
@@ -244,26 +353,10 @@
             body {
                 padding: 0;
             }
-        }
-
-        .chevron-icon {
-            transition: transform 0.3s ease;
-        }
-
-        .chevron-icon.up {
-            transform: rotate(180deg);
-        }
-
-        /* SVG Icons */
-        .svg-icon {
-            display: inline-block;
-            width: 24px;
-            height: 24px;
-            stroke-width: 2;
-            stroke: currentColor;
-            fill: none;
-            stroke-linecap: round;
-            stroke-linejoin: round;
+            
+            .modal-content {
+                width: 95%;
+            }
         }
     </style>
 </head>
@@ -271,22 +364,14 @@
     <div class="container">
         <div class="app-header">
             <h1 class="app-title">Credit Card Optimizer</h1>
-            <svg class="info-icon svg-icon" viewBox="0 0 24 24" id="info-icon">
-                <circle cx="12" cy="12" r="10"></circle>
-                <line x1="12" y1="16" x2="12" y2="12"></line>
-                <line x1="12" y1="8" x2="12.01" y2="8"></line>
-            </svg>
         </div>
         
-        <div class="app-body">
-            <div class="info-panel" id="info-panel">
-                <h2>How to use:</h2>
-                <p>Select a purchase category to see which of your credit cards will give you the best rewards.</p>
-                <p>For specific retailers or categories not listed, choose "Other" and type in the name.</p>
-                <p>Tap on any card to see its detailed benefits and reward structure.</p>
-                <button id="close-info">Close</button>
-            </div>
-            
+        <div class="tabs">
+            <button class="tab active" data-tab="optimize">Optimize</button>
+            <button class="tab" data-tab="manage">Manage Cards</button>
+        </div>
+        
+        <div class="tab-content active" id="optimize-tab">
             <div class="form-group">
                 <label for="category-select">What are you buying?</label>
                 <select id="category-select">
@@ -314,282 +399,171 @@
             
             <div class="result-card" id="result-card">
                 <h2 class="result-title">
-                    <svg class="icon svg-icon" viewBox="0 0 24 24">
-                        <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"></path>
-                    </svg>
                     Best Card for <span id="result-category">Category</span>:
                 </h2>
-                <div class="best-card">
-                    <svg class="icon svg-icon" viewBox="0 0 24 24">
-                        <rect x="3" y="5" width="18" height="14" rx="2"></rect>
-                        <line x1="3" y1="10" x2="21" y2="10"></line>
-                    </svg>
-                    <span class="best-card-name" id="best-card-name">Card Name</span>
-                </div>
-                <div class="reward-rate">
-                    <svg class="icon svg-icon" viewBox="0 0 24 24">
-                        <circle cx="12" cy="12" r="10"></circle>
-                        <line x1="12" y1="8" x2="12" y2="12"></line>
-                        <line x1="12" y1="16" x2="12.01" y2="16"></line>
-                    </svg>
-                    <span class="reward-rate-value" id="reward-rate">5x rewards</span>
-                </div>
+                <div class="best-card" id="best-card-name">Card Name</div>
+                <div class="reward-rate" id="reward-rate">5x rewards</div>
                 <p class="reward-details" id="reward-details">Details about the reward</p>
             </div>
             
-            <div class="cards-list">
-                <h2 class="cards-title">Your Cards:</h2>
-                
-                <!-- Chase Sapphire Reserve -->
-                <div class="card-item">
-                    <div class="card-header" data-card="chase-sapphire-reserve">
-                        <span class="card-name">Chase Sapphire Reserve</span>
-                        <svg class="chevron-icon svg-icon" viewBox="0 0 24 24">
-                            <polyline points="6 9 12 15 18 9"></polyline>
-                        </svg>
-                    </div>
-                    <div class="card-details" id="chase-sapphire-reserve-details">
-                        <div class="detail-section">
-                            <h4 class="detail-title">Reward Categories:</h4>
-                            <ul class="detail-list">
-                                <li><span class="capitalize">Travel:</span> 5x - 5x on flights, 10x on hotels through Chase Travel after $300 travel credit</li>
-                                <li><span class="capitalize">Dining:</span> 3x - 3x points on dining worldwide</li>
-                                <li><span class="capitalize">Airfare:</span> 5x - 5x on flights through Chase Travel</li>
-                                <li><span class="capitalize">Hotels:</span> 10x - 10x on hotels through Chase Travel</li>
-                                <li><span class="capitalize">Car Rentals:</span> 10x - 10x on car rentals through Chase Travel</li>
-                                <li><span class="capitalize">Other Travel:</span> 3x - 3x on other travel after $300 credit</li>
-                                <li><span class="capitalize">General:</span> 1x - 1x on all other purchases</li>
-                            </ul>
-                        </div>
-                        
-                        <div class="detail-section">
-                            <h4 class="detail-title">Benefits:</h4>
-                            <ul class="detail-list">
-                                <li>$300 annual travel credit</li>
-                                <li>Priority Pass lounge access</li>
-                                <li>TSA PreCheck/Global Entry credit</li>
-                                <li>No foreign transaction fees</li>
-                                <li>Trip cancellation/interruption insurance</li>
-                                <li>Points worth 50% more when redeemed for travel</li>
-                            </ul>
-                        </div>
-                        
-                        <div class="detail-section">
-                            <h4 class="detail-title">Car Rental Benefits:</h4>
-                            <ul class="detail-list">
-                                <li>Primary auto rental collision damage waiver</li>
-                                <li>Coverage up to the actual cash value of most rental vehicles</li>
-                                <li>Coverage for theft and collision damage</li>
-                                <li>No foreign transaction fees for overseas rentals</li>
-                            </ul>
-                        </div>
-                        
-                        <div class="detail-section">
-                            <h4 class="detail-title">Annual Fee:</h4>
-                            <p>$550</p>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Amazon Visa -->
-                <div class="card-item">
-                    <div class="card-header" data-card="amazon-visa">
-                        <span class="card-name">Amazon Visa</span>
-                        <svg class="chevron-icon svg-icon" viewBox="0 0 24 24">
-                            <polyline points="6 9 12 15 18 9"></polyline>
-                        </svg>
-                    </div>
-                    <div class="card-details" id="amazon-visa-details">
-                        <div class="detail-section">
-                            <h4 class="detail-title">Reward Categories:</h4>
-                            <ul class="detail-list">
-                                <li><span class="capitalize">Amazon:</span> 5x - 5% back at Amazon.com, Amazon Fresh, Whole Foods (with Prime)</li>
-                                <li><span class="capitalize">Whole Foods:</span> 5x - 5% back at Whole Foods (with Prime)</li>
-                                <li><span class="capitalize">Gas Stations:</span> 2x - 2% back at gas stations</li>
-                                <li><span class="capitalize">Restaurants:</span> 2x - 2% back at restaurants</li>
-                                <li><span class="capitalize">Transit:</span> 2x - 2% back on local transit and commuting</li>
-                                <li><span class="capitalize">Car Rentals:</span> 1x - 1% back on car rentals (2% through Chase Travel)</li>
-                                <li><span class="capitalize">General:</span> 1x - 1% back on all other purchases</li>
-                            </ul>
-                        </div>
-                        
-                        <div class="detail-section">
-                            <h4 class="detail-title">Benefits:</h4>
-                            <ul class="detail-list">
-                                <li>No annual fee (Prime membership required for 5%)</li>
-                                <li>No foreign transaction fees</li>
-                                <li>Travel and purchase protections</li>
-                                <li>Redeem points on Amazon.com or for cash back</li>
-                            </ul>
-                        </div>
-                        
-                        <div class="detail-section">
-                            <h4 class="detail-title">Car Rental Benefits:</h4>
-                            <ul class="detail-list">
-                                <li>Secondary auto rental collision damage waiver</li>
-                                <li>Coverage for theft and collision damage if your personal insurance doesn't cover it</li>
-                                <li>No foreign transaction fees for overseas rentals</li>
-                            </ul>
-                        </div>
-                        
-                        <div class="detail-section">
-                            <h4 class="detail-title">Annual Fee:</h4>
-                            <p>$0 (Prime membership required for 5% back)</p>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Citi Costco -->
-                <div class="card-item">
-                    <div class="card-header" data-card="citi-costco">
-                        <span class="card-name">Citi Costco</span>
-                        <svg class="chevron-icon svg-icon" viewBox="0 0 24 24">
-                            <polyline points="6 9 12 15 18 9"></polyline>
-                        </svg>
-                    </div>
-                    <div class="card-details" id="citi-costco-details">
-                        <div class="detail-section">
-                            <h4 class="detail-title">Reward Categories:</h4>
-                            <ul class="detail-list">
-                                <li><span class="capitalize">Gas Stations:</span> 4x - 4% back on gas at Costco and eligible gas stations (up to $7,000/year)</li>
-                                <li><span class="capitalize">Costco Gas:</span> 4x - 4% back on gas at Costco (up to $7,000/year)</li>
-                                <li><span class="capitalize">EV Charging:</span> 4x - 4% back on EV charging (up to $7,000/year)</li>
-                                <li><span class="capitalize">Travel:</span> 3x - 3% back on eligible travel purchases</li>
-                                <li><span class="capitalize">Car Rentals:</span> 3x - 3% back on car rentals (considered travel purchases)</li>
-                                <li><span class="capitalize">Restaurants:</span> 3x - 3% back at restaurants</li>
-                                <li><span class="capitalize">Costco:</span> 2x - 2% back at Costco and Costco.com</li>
-                                <li><span class="capitalize">General:</span> 1x - 1% back on all other purchases</li>
-                            </ul>
-                        </div>
-                        
-                        <div class="detail-section">
-                            <h4 class="detail-title">Benefits:</h4>
-                            <ul class="detail-list">
-                                <li>No annual fee (Costco membership required)</li>
-                                <li>Travel and purchase protections</li>
-                                <li>Rewards issued annually as a certificate</li>
-                                <li>Extended warranty protection</li>
-                            </ul>
-                        </div>
-                        
-                        <div class="detail-section">
-                            <h4 class="detail-title">Car Rental Benefits:</h4>
-                            <ul class="detail-list">
-                                <li>Secondary auto rental collision damage waiver</li>
-                                <li>Coverage worldwide for theft and collision damage</li>
-                                <li>Must decline the rental company's collision insurance</li>
-                                <li>Coverage limited to actual cash value of the vehicle</li>
-                            </ul>
-                        </div>
-                        
-                        <div class="detail-section">
-                            <h4 class="detail-title">Annual Fee:</h4>
-                            <p>$0 (Costco membership required)</p>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Amex Platinum -->
-                <div class="card-item">
-                    <div class="card-header" data-card="amex-platinum">
-                        <span class="card-name">Amex Platinum</span>
-                        <svg class="chevron-icon svg-icon" viewBox="0 0 24 24">
-                            <polyline points="6 9 12 15 18 9"></polyline>
-                        </svg>
-                    </div>
-                    <div class="card-details" id="amex-platinum-details">
-                        <div class="detail-section">
-                            <h4 class="detail-title">Reward Categories:</h4>
-                            <ul class="detail-list">
-                                <li><span class="capitalize">Airfare:</span> 5x - 5x on flights booked directly with airlines or Amex Travel</li>
-                                <li><span class="capitalize">Hotels:</span> 5x - 5x on prepaid hotels booked with Amex Travel</li>
-                                <li><span class="capitalize">Car Rentals:</span> 1x - 1x on car rentals (may qualify for premium rental program benefits)</li>
-                                <li><span class="capitalize">General:</span> 1x - 1x on all other purchases</li>
-                            </ul>
-                        </div>
-                        
-                        <div class="detail-section">
-                            <h4 class="detail-title">Benefits:</h4>
-                            <ul class="detail-list">
-                                <li>$200 airline fee credit</li>
-                                <li>$200 hotel credit</li>
-                                <li>$240 digital entertainment credit</li>
-                                <li>$200 Uber cash annually</li>
-                                <li>$100 Saks Fifth Avenue credit annually</li>
-                                <li>Access to Centurion and Priority Pass lounges</li>
-                                <li>TSA PreCheck/Global Entry credit</li>
-                                <li>Hilton and Marriott gold status</li>
-                            </ul>
-                        </div>
-                        
-                        <div class="detail-section">
-                            <h4 class="detail-title">Car Rental Benefits:</h4>
-                            <ul class="detail-list">
-                                <li>Premium car rental privileges with Hertz, Avis, and National</li>
-                                <li>Secondary auto rental collision damage waiver</li>
-                                <li>Coverage up to $75,000 for theft and damage (enrollment required)</li>
-                                <li>Status upgrades with select rental companies</li>
-                                <li>Special discounts through Amex Travel portal</li>
-                            </ul>
-                        </div>
-                        
-                        <div class="detail-section">
-                            <h4 class="detail-title">Annual Fee:</h4>
-                            <p>$695</p>
-                        </div>
-                    </div>
-                </div>
+            <div class="cards-list" id="cards-list-optimize">
+                <h2 class="cards-title">Your Cards</h2>
+                <!-- Cards will be populated here -->
+            </div>
+        </div>
+        
+        <div class="tab-content" id="manage-tab">
+            <div class="form-group">
+                <button id="add-card-button">Add New Card</button>
+                <button id="reset-cards-button" class="secondary">Reset to Default Cards</button>
+            </div>
+            
+            <div class="cards-list" id="cards-list-manage">
+                <h2 class="cards-title">Your Cards</h2>
+                <!-- Cards will be populated here -->
             </div>
         </div>
     </div>
+    
+    <div class="modal" id="card-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title" id="modal-title">Add Credit Card</h2>
+                <button class="modal-close" id="modal-close">&times;</button>
+            </div>
+            
+            <div class="form-group">
+                <label for="preset-card-select">Select a popular card or create custom:</label>
+                <select id="preset-card-select">
+                    <option value="">Custom Card</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="card-name">Card Name:</label>
+                <input type="text" id="card-name" placeholder="e.g., Chase Sapphire Preferred">
+            </div>
+            
+            <div class="form-group">
+                <label for="annual-fee">Annual Fee ($):</label>
+                <input type="number" id="annual-fee" placeholder="0">
+            </div>
+            
+            <div class="form-group">
+                <label for="notes">Additional Notes:</label>
+                <input type="text" id="notes" placeholder="e.g., Requires membership">
+            </div>
+            
+            <div class="categories-section">
+                <h3 class="categories-title">Reward Categories:</h3>
+                <div id="reward-categories-container">
+                    <!-- Reward categories will be added here -->
+                    <div class="reward-category">
+                        <input type="text" placeholder="Category" class="category-name">
+                        <input type="number" min="1" max="100" value="1" class="category-rate">
+                        <span>x</span>
+                        <input type="text" placeholder="Details" class="category-details">
+                    </div>
+                </div>
+                <button class="btn-add-category" id="add-category-button">+ Add Category</button>
+            </div>
+            
+            <div class="modal-footer">
+                <button class="secondary" id="cancel-button">Cancel</button>
+                <button id="save-card-button">Save Card</button>
+            </div>
+        </div>
+    </div>
+    
+    <div class="notification" id="notification">
+        Card saved successfully!
+    </div>
 
     <script>
-        // Credit Card Data
-        const creditCards = [
+        // DOM Elements
+        const categorySelect = document.getElementById('category-select');
+        const customCategoryGroup = document.getElementById('custom-category-group');
+        const customCategoryInput = document.getElementById('custom-category');
+        const resultCard = document.getElementById('result-card');
+        const resultCategory = document.getElementById('result-category');
+        const bestCardName = document.getElementById('best-card-name');
+        const rewardRate = document.getElementById('reward-rate');
+        const rewardDetails = document.getElementById('reward-details');
+        const tabs = document.querySelectorAll('.tab');
+        const tabContents = document.querySelectorAll('.tab-content');
+        const cardsListOptimize = document.getElementById('cards-list-optimize');
+        const cardsListManage = document.getElementById('cards-list-manage');
+        const addCardButton = document.getElementById('add-card-button');
+        const resetCardsButton = document.getElementById('reset-cards-button');
+        const cardModal = document.getElementById('card-modal');
+        const modalTitle = document.getElementById('modal-title');
+        const modalClose = document.getElementById('modal-close');
+        const cardNameInput = document.getElementById('card-name');
+        const annualFeeInput = document.getElementById('annual-fee');
+        const notesInput = document.getElementById('notes');
+        const rewardCategoriesContainer = document.getElementById('reward-categories-container');
+        const addCategoryButton = document.getElementById('add-category-button');
+        const saveCardButton = document.getElementById('save-card-button');
+        const cancelButton = document.getElementById('cancel-button');
+        const notification = document.getElementById('notification');
+
+        // Default Credit Card Data
+        const defaultCards = [
             {
+                id: 'chase-sapphire-reserve',
                 name: 'Chase Sapphire Reserve',
+                annualFee: 550,
+                notes: 'Priority Pass, $300 travel credit',
                 categories: {
-                    travel: { rate: 5, details: '5x on flights, 10x on hotels through Chase Travel after $300 travel credit' },
-                    dining: { rate: 3, details: '3x points on dining worldwide' },
-                    airfare: { rate: 5, details: '5x on flights through Chase Travel' },
-                    hotels: { rate: 10, details: '10x on hotels through Chase Travel' },
+                    'travel': { rate: 3, details: '3x points on travel worldwide' },
+                    'dining': { rate: 3, details: '3x points on dining worldwide' },
+                    'airfare': { rate: 5, details: '5x on flights through Chase Travel' },
+                    'hotels': { rate: 10, details: '10x on hotels through Chase Travel' },
                     'car rentals': { rate: 10, details: '10x on car rentals through Chase Travel' },
-                    'other travel': { rate: 3, details: '3x on other travel after $300 credit' },
-                    general: { rate: 1, details: '1x on all other purchases' }
+                    'general': { rate: 1, details: '1x on all other purchases' }
                 }
             },
             {
+                id: 'amazon-visa',
                 name: 'Amazon Visa',
+                annualFee: 0,
+                notes: 'Prime membership required for 5% back',
                 categories: {
-                    amazon: { rate: 5, details: '5% back at Amazon.com, Amazon Fresh, Whole Foods (with Prime)' },
+                    'amazon': { rate: 5, details: '5% back at Amazon.com (with Prime)' },
                     'whole foods': { rate: 5, details: '5% back at Whole Foods (with Prime)' },
                     'gas stations': { rate: 2, details: '2% back at gas stations' },
-                    restaurants: { rate: 2, details: '2% back at restaurants' },
-                    transit: { rate: 2, details: '2% back on local transit and commuting' },
+                    'restaurants': { rate: 2, details: '2% back at restaurants' },
+                    'transit': { rate: 2, details: '2% back on transit and commuting' },
                     'car rentals': { rate: 1, details: '1% back on car rentals (2% through Chase Travel)' },
-                    general: { rate: 1, details: '1% back on all other purchases' }
+                    'general': { rate: 1, details: '1% back on all other purchases' }
                 }
             },
             {
+                id: 'citi-costco',
                 name: 'Citi Costco',
+                annualFee: 0,
+                notes: 'Costco membership required',
                 categories: {
-                    'gas stations': { rate: 4, details: '4% back on gas at Costco and eligible gas stations (up to $7,000/year)' },
-                    'costco gas': { rate: 4, details: '4% back on gas at Costco (up to $7,000/year)' },
+                    'gas stations': { rate: 4, details: '4% back on gas (up to $7,000/year)' },
+                    'costco gas': { rate: 4, details: '4% back on Costco gas (up to $7,000/year)' },
                     'ev charging': { rate: 4, details: '4% back on EV charging (up to $7,000/year)' },
-                    travel: { rate: 3, details: '3% back on eligible travel purchases' },
-                    'car rentals': { rate: 3, details: '3% back on car rentals (considered travel purchases)' },
-                    restaurants: { rate: 3, details: '3% back at restaurants' },
-                    costco: { rate: 2, details: '2% back at Costco and Costco.com' },
-                    general: { rate: 1, details: '1% back on all other purchases' }
+                    'travel': { rate: 3, details: '3% back on eligible travel purchases' },
+                    'car rentals': { rate: 3, details: '3% back on car rentals' },
+                    'restaurants': { rate: 3, details: '3% back at restaurants' },
+                    'costco': { rate: 2, details: '2% back at Costco' },
+                    'general': { rate: 1, details: '1% back on all other purchases' }
                 }
             },
             {
+                id: 'amex-platinum',
                 name: 'Amex Platinum',
+                annualFee: 695,
+                notes: 'Centurion lounge access, $200 airline fee credit',
                 categories: {
-                    airfare: { rate: 5, details: '5x on flights booked directly with airlines or Amex Travel' },
-                    hotels: { rate: 5, details: '5x on prepaid hotels booked with Amex Travel' },
-                    'car rentals': { rate: 1, details: '1x on car rentals (may qualify for premium rental program benefits)' },
-                    general: { rate: 1, details: '1x on all other purchases' }
+                    'airfare': { rate: 5, details: '5x points on flights booked directly with airlines or Amex Travel' },
+                    'hotels': { rate: 5, details: '5x points on prepaid hotels booked with Amex Travel' },
+                    'car rentals': { rate: 1, details: '1x points on car rentals' },
+                    'general': { rate: 1, details: '1x points on all other purchases' }
                 }
             }
         ];
@@ -647,76 +621,326 @@
             'other': 'general',
         };
 
-        // Find the best card for a given category
-        function getBestCard(categoryInput) {
-            const searchCategory = categoryInput.toLowerCase();
+        // State variables
+        let cardsData = [];
+        let editingCardId = null;
+
+        // Initialize the app
+        function initApp() {
+            // Load cards from localStorage or use defaults
+            loadCards();
             
-            // Try to map the search category to a standard category
-            const mappedCategory = categoryMap[searchCategory] || searchCategory;
+            // Render cards
+            renderCardsOptimize();
+            renderCardsManage();
             
-            // Find the best card for this category
-            let bestCard = null;
-            let bestRate = 0;
-            let bestDetails = '';
+            // Add event listeners
+            categorySelect.addEventListener('change', handleCategoryChange);
+            customCategoryInput.addEventListener('input', handleCustomCategoryInput);
             
-            creditCards.forEach(card => {
-                // Check if the card has a rate for this category
-                if (card.categories[mappedCategory] && card.categories[mappedCategory].rate > bestRate) {
-                    bestCard = card.name;
-                    bestRate = card.categories[mappedCategory].rate;
-                    bestDetails = card.categories[mappedCategory].details;
-                }
-                
-                // For unmapped categories, fall back to 'general'
-                if (!bestCard && card.categories.general) {
-                    bestCard = card.name;
-                    bestRate = card.categories.general.rate;
-                    bestDetails = card.categories.general.details;
-                }
+            tabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    switchTab(tab.getAttribute('data-tab'));
+                });
             });
             
-            if (!bestCard) {
-                bestCard = 'Chase Sapphire Reserve';
-                bestRate = 1;
-                bestDetails = '1x on all other purchases';
-            }
-            
-            return {
-                card: bestCard,
-                rate: bestRate,
-                details: bestDetails
-            };
+            addCardButton.addEventListener('click', openAddCardModal);
+            resetCardsButton.addEventListener('click', resetToDefaultCards);
+            modalClose.addEventListener('click', closeModal);
+            addCategoryButton.addEventListener('click', addRewardCategory);
+            saveCardButton.addEventListener('click', saveCard);
+            cancelButton.addEventListener('click', closeModal);
         }
 
-        // DOM Elements
-        const categorySelect = document.getElementById('category-select');
-        const customCategoryGroup = document.getElementById('custom-category-group');
-        const customCategoryInput = document.getElementById('custom-category');
-        const resultCard = document.getElementById('result-card');
-        const resultCategory = document.getElementById('result-category');
-        const bestCardName = document.getElementById('best-card-name');
-        const rewardRate = document.getElementById('reward-rate');
-        const rewardDetails = document.getElementById('reward-details');
-        const infoIcon = document.getElementById('info-icon');
-        const infoPanel = document.getElementById('info-panel');
-        const closeInfoBtn = document.getElementById('close-info');
-        const cardHeaders = document.querySelectorAll('.card-header');
+        // Load cards from localStorage or use defaults
+        function loadCards() {
+            const savedCards = localStorage.getItem('creditCards');
+            if (savedCards) {
+                cardsData = JSON.parse(savedCards);
+            } else {
+                cardsData = [...defaultCards];
+                saveCardsToStorage();
+            }
+        }
 
-        // Event Listeners
-        categorySelect.addEventListener('change', handleCategoryChange);
-        customCategoryInput.addEventListener('input', handleCustomCategoryInput);
-        infoIcon.addEventListener('click', toggleInfoPanel);
-        closeInfoBtn.addEventListener('click', toggleInfoPanel);
-        
-        // Add event listeners to card headers
-        cardHeaders.forEach(header => {
-            header.addEventListener('click', function() {
-                toggleCardDetails(this.getAttribute('data-card'));
-                toggleChevron(this.querySelector('.chevron-icon'));
+        // Save cards to localStorage
+        function saveCardsToStorage() {
+            localStorage.setItem('creditCards', JSON.stringify(cardsData));
+        }
+
+        // Reset to default cards
+        function resetToDefaultCards() {
+            if (confirm('Are you sure you want to reset to default cards? This will remove any custom cards you\'ve added.')) {
+                cardsData = [...defaultCards];
+                saveCardsToStorage();
+                renderCardsOptimize();
+                renderCardsManage();
+                showNotification('Cards reset to defaults');
+            }
+        }
+
+        // Render cards in the optimize tab
+        function renderCardsOptimize() {
+            cardsListOptimize.innerHTML = '<h2 class="cards-title">Your Cards</h2>';
+            
+            cardsData.forEach(card => {
+                const cardElement = document.createElement('div');
+                cardElement.className = 'card-item';
+                cardElement.innerHTML = `
+                    <div class="card-header" data-card="${card.id}">
+                        <span class="card-name">${card.name}</span>
+                        <span>▼</span>
+                    </div>
+                    <div class="card-details" id="${card.id}-details">
+                        <div class="detail-section">
+                            <h4 class="detail-title">Reward Categories:</h4>
+                            <ul class="detail-list">
+                                ${Object.entries(card.categories).map(([category, details]) => 
+                                    `<li><span class="capitalize">${category}:</span> ${details.rate}x - ${details.details}</li>`
+                                ).join('')}
+                            </ul>
+                        </div>
+                        
+                        <div class="detail-section">
+                            <h4 class="detail-title">Annual Fee:</h4>
+                            <p>$${card.annualFee}</p>
+                        </div>
+                        
+                        ${card.notes ? `
+                        <div class="detail-section">
+                            <h4 class="detail-title">Notes:</h4>
+                            <p>${card.notes}</p>
+                        </div>
+                        ` : ''}
+                    </div>
+                `;
+                cardsListOptimize.appendChild(cardElement);
+                
+                // Add click event to toggle details
+                const cardHeader = cardElement.querySelector('.card-header');
+                cardHeader.addEventListener('click', () => {
+                    const cardId = cardHeader.getAttribute('data-card');
+                    toggleCardDetails(cardId);
+                    toggleChevron(cardHeader.querySelector('span'));
+                });
             });
-        });
+        }
 
-        // Functions
+        // Render cards in the manage tab
+        function renderCardsManage() {
+            cardsListManage.innerHTML = '<h2 class="cards-title">Your Cards</h2>';
+            
+            cardsData.forEach(card => {
+                const cardElement = document.createElement('div');
+                cardElement.className = 'card-item';
+                cardElement.innerHTML = `
+                    <div class="card-header">
+                        <span class="card-name">${card.name}</span>
+                        <div class="card-actions">
+                            <button class="edit-card secondary" data-id="${card.id}">Edit</button>
+                            <button class="delete-card danger" data-id="${card.id}">Delete</button>
+                        </div>
+                    </div>
+                `;
+                cardsListManage.appendChild(cardElement);
+                
+                // Add event listeners for edit and delete buttons
+                const editButton = cardElement.querySelector('.edit-card');
+                const deleteButton = cardElement.querySelector('.delete-card');
+                
+                editButton.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    openEditCardModal(card.id);
+                });
+                
+                deleteButton.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    deleteCard(card.id);
+                });
+            });
+        }
+
+        // Open modal to add a new card
+        function openAddCardModal() {
+            modalTitle.textContent = 'Add Credit Card';
+            cardNameInput.value = '';
+            annualFeeInput.value = '';
+            notesInput.value = '';
+            rewardCategoriesContainer.innerHTML = '';
+            
+            // Add a default general category
+            addRewardCategory();
+            
+            editingCardId = null;
+            cardModal.classList.add('active');
+        }
+
+        // Open modal to edit an existing card
+        function openEditCardModal(cardId) {
+            const card = cardsData.find(c => c.id === cardId);
+            if (!card) return;
+            
+            modalTitle.textContent = 'Edit Credit Card';
+            cardNameInput.value = card.name;
+            annualFeeInput.value = card.annualFee;
+            notesInput.value = card.notes || '';
+            rewardCategoriesContainer.innerHTML = '';
+            
+            // Add existing categories
+            Object.entries(card.categories).forEach(([category, details]) => {
+                addRewardCategory(category, details.rate, details.details);
+            });
+            
+            editingCardId = cardId;
+            cardModal.classList.add('active');
+        }
+
+        // Add a new reward category input row
+        function addRewardCategory(category = '', rate = 1, details = '') {
+            const categoryRow = document.createElement('div');
+            categoryRow.className = 'reward-category';
+            categoryRow.innerHTML = `
+                <input type="text" placeholder="Category" class="category-name" value="${category}">
+                <input type="number" min="1" max="100" value="${rate}" class="category-rate">
+                <span>x</span>
+                <input type="text" placeholder="Details" class="category-details" value="${details}">
+                <button class="remove-category secondary">-</button>
+            `;
+            rewardCategoriesContainer.appendChild(categoryRow);
+            
+            // Add event listener to remove button
+            const removeButton = categoryRow.querySelector('.remove-category');
+            removeButton.addEventListener('click', (e) => {
+                e.preventDefault();
+                categoryRow.remove();
+            });
+        }
+
+        // Save a card (new or edited)
+        function saveCard() {
+            const name = cardNameInput.value.trim();
+            const annualFee = parseInt(annualFeeInput.value) || 0;
+            const notes = notesInput.value.trim();
+            
+            if (!name) {
+                alert('Please enter a card name');
+                return;
+            }
+            
+            // Get all category inputs
+            const categoryRows = rewardCategoriesContainer.querySelectorAll('.reward-category');
+            const categories = {};
+            
+            for (const row of categoryRows) {
+                const categoryName = row.querySelector('.category-name').value.trim().toLowerCase();
+                const rate = parseInt(row.querySelector('.category-rate').value) || 1;
+                const details = row.querySelector('.category-details').value.trim();
+                
+                if (categoryName) {
+                    categories[categoryName] = { rate, details };
+                }
+            }
+            
+            if (Object.keys(categories).length === 0) {
+                alert('Please add at least one reward category');
+                return;
+            }
+            
+            // Make sure there's a general/default category
+            if (!categories['general']) {
+                categories['general'] = { rate: 1, details: '1x on all other purchases' };
+            }
+            
+            // Create or update card
+            if (editingCardId) {
+                // Update existing card
+                const index = cardsData.findIndex(c => c.id === editingCardId);
+                if (index !== -1) {
+                    cardsData[index] = {
+                        ...cardsData[index],
+                        name,
+                        annualFee,
+                        notes,
+                        categories
+                    };
+                }
+            } else {
+                // Add new card
+                const newCard = {
+                    id: 'card-' + Date.now(),
+                    name,
+                    annualFee,
+                    notes,
+                    categories
+                };
+                cardsData.push(newCard);
+            }
+            
+            // Save to localStorage and update UI
+            saveCardsToStorage();
+            renderCardsOptimize();
+            renderCardsManage();
+            
+            closeModal();
+            showNotification(editingCardId ? 'Card updated successfully' : 'Card added successfully');
+        }
+
+        // Delete a card
+        function deleteCard(cardId) {
+            if (cardsData.length <= 1) {
+                alert('You must have at least one credit card');
+                return;
+            }
+            
+            if (confirm('Are you sure you want to delete this card?')) {
+                cardsData = cardsData.filter(card => card.id !== cardId);
+                saveCardsToStorage();
+                renderCardsOptimize();
+                renderCardsManage();
+                showNotification('Card deleted successfully');
+            }
+        }
+
+        // Close the modal
+        function closeModal() {
+            cardModal.classList.remove('active');
+            editingCardId = null;
+        }
+
+        // Show a notification
+        function showNotification(message, isError = false) {
+            notification.textContent = message;
+            notification.classList.remove('error');
+            
+            if (isError) {
+                notification.classList.add('error');
+            }
+            
+            notification.classList.add('active');
+            
+            setTimeout(() => {
+                notification.classList.remove('active');
+            }, 3000);
+        }
+
+        // Switch tabs
+        function switchTab(tabId) {
+            tabs.forEach(tab => {
+                tab.classList.remove('active');
+                if (tab.getAttribute('data-tab') === tabId) {
+                    tab.classList.add('active');
+                }
+            });
+            
+            tabContents.forEach(content => {
+                content.classList.remove('active');
+                if (content.id === tabId + '-tab') {
+                    content.classList.add('active');
+                }
+            });
+        }
+
+        // Handle category selection changes
         function handleCategoryChange() {
             const selectedCategory = categorySelect.value;
             
@@ -738,6 +962,7 @@
             }
         }
 
+        // Handle custom category input
         function handleCustomCategoryInput() {
             if (customCategoryInput.value) {
                 updateResult(customCategoryInput.value);
@@ -746,22 +971,50 @@
             }
         }
 
+        // Find the best card for a given category and update the result
         function updateResult(category) {
-            const bestCardInfo = getBestCard(category);
+            const searchCategory = category.toLowerCase();
             
-            resultCategory.textContent = category;
-            bestCardName.textContent = bestCardInfo.card;
-            rewardRate.textContent = bestCardInfo.rate + 'x rewards';
-            rewardDetails.textContent = bestCardInfo.details;
+            // Try to map the search category to a standard category
+            const mappedCategory = categoryMap[searchCategory] || searchCategory;
             
-            resultCard.style.display = 'block';
-            resultCard.classList.add('active');
+            // Find the best card for this category
+            let bestCard = null;
+            let bestRate = 0;
+            let bestDetails = '';
+            
+            cardsData.forEach(card => {
+                // Check each category in the card
+                for (const [cardCategory, details] of Object.entries(card.categories)) {
+                    // Check if this category matches or is an alias
+                    if ((cardCategory === mappedCategory || categoryMap[cardCategory] === mappedCategory) && details.rate > bestRate) {
+                        bestCard = card.name;
+                        bestRate = details.rate;
+                        bestDetails = details.details;
+                    }
+                }
+                
+                // If no specific category match found, check for general rate
+                if (!bestCard && card.categories.general && (bestRate === 0 || card.categories.general.rate > bestRate)) {
+                    bestCard = card.name;
+                    bestRate = card.categories.general.rate;
+                    bestDetails = card.categories.general.details;
+                }
+            });
+            
+            // Update the UI
+            if (bestCard) {
+                resultCategory.textContent = category;
+                bestCardName.textContent = bestCard;
+                rewardRate.textContent = bestRate + 'x rewards';
+                rewardDetails.textContent = bestDetails;
+                resultCard.style.display = 'block';
+            } else {
+                resultCard.style.display = 'none';
+            }
         }
 
-        function toggleInfoPanel() {
-            infoPanel.classList.toggle('active');
-        }
-
+        // Toggle card details
         function toggleCardDetails(cardId) {
             const detailsElement = document.getElementById(cardId + '-details');
             if (detailsElement) {
@@ -769,9 +1022,19 @@
             }
         }
 
+        // Toggle chevron icon
         function toggleChevron(chevronElement) {
-            chevronElement.classList.toggle('up');
+            if (chevronElement) {
+                if (chevronElement.textContent === '▼') {
+                    chevronElement.textContent = '▲';
+                } else {
+                    chevronElement.textContent = '▼';
+                }
+            }
         }
+
+        // Initialize the app
+        document.addEventListener('DOMContentLoaded', initApp);
     </script>
 </body>
 </html>
