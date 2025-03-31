@@ -357,6 +357,95 @@ input:focus, select:focus {
     max-height: 90vh;
     overflow-y: auto;
     box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    display: flex;
+    flex-direction: column;
+    max-height: 80vh;  /* Reduce slightly to ensure it's not too tall */
+}
+
+/* Ensure the dropdown menu for card selection is properly styled */
+#preset-card-select {
+    position: relative;
+    z-index: 1010;  /* Ensure it shows above other modal content */
+    background-color: white;
+}
+
+/* Style the optgroup headers in the dropdown */
+optgroup {
+    font-weight: bold;
+    color: var(--primary-dark);
+    background-color: var(--neutral-light);
+}
+
+/* Make sure the form sections have proper spacing */
+.form-group {
+    margin-bottom: 16px;
+}
+
+/* Ensure all content inside the modal is properly spaced */
+.modal-header, .categories-section, .modal-footer {
+    flex-shrink: 0;  /* Prevent these sections from shrinking */
+}
+
+/* Make the categories container scrollable if needed */
+#reward-categories-container {
+    max-height: 30vh;
+    overflow-y: auto;
+    padding-right: 8px;
+}
+
+/* Ensure the dropdown options are visible */
+#preset-card-select option {
+    padding: 8px;
+}
+
+/* Optgroup styling */
+#preset-card-select optgroup {
+    padding: 6px 0;
+}
+
+/* Make sure the reward categories have proper spacing */
+.reward-category {
+    display: flex;
+    margin-bottom: 12px;
+    align-items: center;
+    flex-wrap: wrap;  /* Allow wrapping on small screens */
+}
+
+.reward-category input {
+    margin-right: 8px;
+    margin-bottom: 4px;  /* Add some bottom margin for when inputs wrap */
+}
+
+/* Responsive adjustments for small screens */
+@media (max-width: 640px) {
+    .modal-content {
+        max-width: 95%;  /* Take up more width on small screens */
+        padding: 16px;   /* Reduce padding on small screens */
+    }
+    
+    .reward-category {
+        flex-wrap: wrap;
+    }
+    
+    .reward-category input[type="text"] {
+        width: calc(100% - 16px);
+        margin-bottom: 8px;
+    }
+    
+    .reward-category input[type="number"] {
+        width: 60px;
+    }
+}
+        
+.modal-content {
+    background-color: white;
+    padding: 24px;
+    border-radius: 12px;
+    width: 90%;
+    max-width: 500px;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
 }
 
 .modal-header {
@@ -887,49 +976,6 @@ const defaultCards = [
         }
     },
     {
-        id: 'amazon-visa',
-        name: 'Amazon Visa',
-        annualFee: 0,
-        notes: 'Prime membership required for 5% back',
-        categories: {
-            'amazon': { rate: 5, details: '5% back at Amazon.com (with Prime)' },
-            'whole foods': { rate: 5, details: '5% back at Whole Foods (with Prime)' },
-            'gas stations': { rate: 2, details: '2% back at gas stations' },
-            'restaurants': { rate: 2, details: '2% back at restaurants' },
-            'transit': { rate: 2, details: '2% back on transit and commuting' },
-            'car rentals': { rate: 1, details: '1% back on car rentals (2% through Chase Travel)' },
-            'general': { rate: 1, details: '1% back on all other purchases' }
-        }
-    },
-    {
-        id: 'citi-costco',
-        name: 'Citi Costco',
-        annualFee: 0,
-        notes: 'Costco membership required',
-        categories: {
-            'gas stations': { rate: 4, details: '4% back on gas (up to $7,000/year)' },
-            'costco gas': { rate: 4, details: '4% back on Costco gas (up to $7,000/year)' },
-            'ev charging': { rate: 4, details: '4% back on EV charging (up to $7,000/year)' },
-            'travel': { rate: 3, details: '3% back on eligible travel purchases' },
-            'car rentals': { rate: 3, details: '3% back on car rentals' },
-            'restaurants': { rate: 3, details: '3% back at restaurants' },
-            'costco': { rate: 2, details: '2% back at Costco' },
-            'general': { rate: 1, details: '1% back on all other purchases' }
-        }
-    },
-    {
-        id: 'amex-platinum',
-        name: 'Amex Platinum',
-        annualFee: 695,
-        notes: 'Centurion lounge access, $200 airline fee credit',
-        categories: {
-            'airfare': { rate: 5, details: '5x points on flights booked directly with airlines or Amex Travel' },
-            'hotels': { rate: 5, details: '5x on prepaid hotels booked with Amex Travel' },
-            'car rentals': { rate: 1, details: '1x points on car rentals' },
-            'general': { rate: 1, details: '1x points on all other purchases' }
-        }
-    },
-    {
         id: 'amex-gold',
         name: 'Amex Gold Card',
         annualFee: 325,
@@ -1422,14 +1468,37 @@ function populateCardFromPreset() {
         // Clear existing options and add the default 'Custom Card' option
         selectCardDropdown.innerHTML = '<option value="">Custom Card</option>';
         
-        // Add all default cards as options
-        defaultCards.forEach(card => {
+        // Add an optgroup for default cards
+        const defaultGroup = document.createElement('optgroup');
+        defaultGroup.label = "Popular Cards";
+        selectCardDropdown.appendChild(defaultGroup);
+        
+        // Add original default cards (first 14 cards)
+        const originalDefaultCards = defaultCards.slice(0, 14);
+        originalDefaultCards.forEach(card => {
             // Skip cards that are already in the user's collection
             if (!cardsData.some(c => c.id === card.id)) {
                 const option = document.createElement('option');
                 option.value = card.id;
                 option.textContent = card.name;
-                selectCardDropdown.appendChild(option);
+                defaultGroup.appendChild(option);
+            }
+        });
+        
+        // Add an optgroup for expanded cards
+        const expandedGroup = document.createElement('optgroup');
+        expandedGroup.label = "Additional Cards";
+        selectCardDropdown.appendChild(expandedGroup);
+        
+        // Add expanded cards (cards after index 13)
+        const expandedCards = defaultCards.slice(14);
+        expandedCards.forEach(card => {
+            // Skip cards that are already in the user's collection
+            if (!cardsData.some(c => c.id === card.id)) {
+                const option = document.createElement('option');
+                option.value = card.id;
+                option.textContent = card.name;
+                expandedGroup.appendChild(option);
             }
         });
     }
