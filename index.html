@@ -1448,67 +1448,56 @@ function saveCardsToStorage() {
     localStorage.setItem('creditCards', JSON.stringify(cardsData));
 }
 
-// Reset to default cards
-function resetToDefaultCards() {
-    if (confirm('Are you sure you want to reset to default cards? This will remove any custom cards you\'ve added.')) {
-        cardsData = [...defaultCards];
-        saveCardsToStorage();
-        renderCardsOptimize();
-        renderCardsManage();
-        showNotification('Cards reset to defaults');
-    }
-}
-
-// Add a preselected card to the modal
 function populateCardFromPreset() {
     const selectCardDropdown = document.getElementById('preset-card-select');
     
-    // Only populate if empty to avoid clearing the selection
-    if (selectCardDropdown.options.length <= 1) {
-        // Clear existing options and add the default 'Custom Card' option
-        selectCardDropdown.innerHTML = '<option value="">Custom Card</option>';
+    // Clear existing options and add the default 'Custom Card' option
+    selectCardDropdown.innerHTML = '<option value="">Custom Card</option>';
+    
+    // Add original default cards directly as options (not using optgroup for better compatibility)
+    const originalDefaultCards = defaultCards.slice(0, 14);
+    if (originalDefaultCards.length > 0) {
+        // Add a divider
+        const divider1 = document.createElement('option');
+        divider1.disabled = true;
+        divider1.textContent = "--- Popular Cards ---";
+        selectCardDropdown.appendChild(divider1);
         
-        // Add an optgroup for default cards
-        const defaultGroup = document.createElement('optgroup');
-        defaultGroup.label = "Popular Cards";
-        selectCardDropdown.appendChild(defaultGroup);
-        
-        // Add original default cards (first 14 cards)
-        const originalDefaultCards = defaultCards.slice(0, 14);
+        // Add the cards
         originalDefaultCards.forEach(card => {
             // Skip cards that are already in the user's collection
             if (!cardsData.some(c => c.id === card.id)) {
                 const option = document.createElement('option');
                 option.value = card.id;
                 option.textContent = card.name;
-                defaultGroup.appendChild(option);
+                selectCardDropdown.appendChild(option);
             }
         });
+    }
+    
+    // Add expanded cards directly as options
+    const expandedCards = defaultCards.slice(14);
+    if (expandedCards.length > 0) {
+        // Add a divider
+        const divider2 = document.createElement('option');
+        divider2.disabled = true;
+        divider2.textContent = "--- Additional Cards ---";
+        selectCardDropdown.appendChild(divider2);
         
-        // Add an optgroup for expanded cards
-        const expandedGroup = document.createElement('optgroup');
-        expandedGroup.label = "Additional Cards";
-        selectCardDropdown.appendChild(expandedGroup);
-        
-        // Add expanded cards (cards after index 13)
-        const expandedCards = defaultCards.slice(14);
+        // Add the cards
         expandedCards.forEach(card => {
             // Skip cards that are already in the user's collection
             if (!cardsData.some(c => c.id === card.id)) {
                 const option = document.createElement('option');
                 option.value = card.id;
                 option.textContent = card.name;
-                expandedGroup.appendChild(option);
+                selectCardDropdown.appendChild(option);
             }
         });
     }
     
-    // Remove previous event listeners by cloning and replacing
-    const newSelect = selectCardDropdown.cloneNode(true);
-    selectCardDropdown.parentNode.replaceChild(newSelect, selectCardDropdown);
-    
     // Add event listener for changes
-    newSelect.addEventListener('change', function() {
+    selectCardDropdown.addEventListener('change', function() {
         const selectedCardId = this.value;
         if (selectedCardId) {
             // Find the selected card
@@ -1536,6 +1525,24 @@ function populateCardFromPreset() {
             addRewardCategory(); // Add one empty category
         }
     });
+}
+
+// Also fix the resetToDefaultCards function to ensure it's clearing everything properly
+function resetToDefaultCards() {
+    if (confirm('Are you sure you want to reset to default cards? This will remove any custom cards you\'ve added.')) {
+        // Clear existing cards and replace with defaults
+        cardsData = JSON.parse(JSON.stringify(defaultCards));
+        
+        // Save to localStorage
+        saveCardsToStorage();
+        
+        // Re-render cards
+        renderCardsOptimize();
+        renderCardsManage();
+        
+        // Show notification
+        showNotification('Cards reset to defaults');
+    }
 }
 
 // Render cards in the Optimize tab
