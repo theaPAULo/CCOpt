@@ -1448,99 +1448,23 @@ function saveCardsToStorage() {
     localStorage.setItem('creditCards', JSON.stringify(cardsData));
 }
 
-function populateCardFromPreset() {
-    const selectCardDropdown = document.getElementById('preset-card-select');
-    
-    // Clear existing options and add the default 'Custom Card' option
-    selectCardDropdown.innerHTML = '<option value="">Custom Card</option>';
-    
-    // Add original default cards directly as options (not using optgroup for better compatibility)
-    const originalDefaultCards = defaultCards.slice(0, 14);
-    if (originalDefaultCards.length > 0) {
-        // Add a divider
-        const divider1 = document.createElement('option');
-        divider1.disabled = true;
-        divider1.textContent = "--- Popular Cards ---";
-        selectCardDropdown.appendChild(divider1);
-        
-        // Add the cards
-        originalDefaultCards.forEach(card => {
-            // Skip cards that are already in the user's collection
-            if (!cardsData.some(c => c.id === card.id)) {
-                const option = document.createElement('option');
-                option.value = card.id;
-                option.textContent = card.name;
-                selectCardDropdown.appendChild(option);
-            }
-        });
-    }
-    
-    // Add expanded cards directly as options
-    const expandedCards = defaultCards.slice(14);
-    if (expandedCards.length > 0) {
-        // Add a divider
-        const divider2 = document.createElement('option');
-        divider2.disabled = true;
-        divider2.textContent = "--- Additional Cards ---";
-        selectCardDropdown.appendChild(divider2);
-        
-        // Add the cards
-        expandedCards.forEach(card => {
-            // Skip cards that are already in the user's collection
-            if (!cardsData.some(c => c.id === card.id)) {
-                const option = document.createElement('option');
-                option.value = card.id;
-                option.textContent = card.name;
-                selectCardDropdown.appendChild(option);
-            }
-        });
-    }
-    
-    // Add event listener for changes
-    selectCardDropdown.addEventListener('change', function() {
-        const selectedCardId = this.value;
-        if (selectedCardId) {
-            // Find the selected card
-            const selectedCard = defaultCards.find(card => card.id === selectedCardId);
-            if (selectedCard) {
-                // Populate the form with the selected card's details
-                cardNameInput.value = selectedCard.name;
-                annualFeeInput.value = selectedCard.annualFee;
-                notesInput.value = selectedCard.notes || '';
-                
-                // Clear existing categories
-                rewardCategoriesContainer.innerHTML = '';
-                
-                // Add categories from the selected card
-                Object.entries(selectedCard.categories).forEach(([category, details]) => {
-                    addRewardCategory(category, details.rate, details.details);
-                });
-            }
-        } else {
-            // Reset form for custom card
-            cardNameInput.value = '';
-            annualFeeInput.value = '';
-            notesInput.value = '';
-            rewardCategoriesContainer.innerHTML = '';
-            addRewardCategory(); // Add one empty category
-        }
-    });
-}
 
-// Also fix the resetToDefaultCards function to ensure it's clearing everything properly
+
+// Replace your resetToDefaultCards function with this version
 function resetToDefaultCards() {
     if (confirm('Are you sure you want to reset to default cards? This will remove any custom cards you\'ve added.')) {
-        // Clear existing cards and replace with defaults
+        // Create a deep copy of the default cards to ensure we don't have reference issues
         cardsData = JSON.parse(JSON.stringify(defaultCards));
         
-        // Save to localStorage
+        // Make sure to clear and reload from localStorage
+        localStorage.removeItem('creditCards');
         saveCardsToStorage();
         
-        // Re-render cards
+        // Re-render both card displays
         renderCardsOptimize();
         renderCardsManage();
         
-        // Show notification
+        // Show confirmation to the user
         showNotification('Cards reset to defaults');
     }
 }
