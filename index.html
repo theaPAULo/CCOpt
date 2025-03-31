@@ -872,6 +872,51 @@ const defaultCards = [
             'general': { rate: 1, details: '1% back on all other purchases' }
         }
     },
+     {
+        id: 'chase-sapphire-reserve',
+        name: 'Chase Sapphire Reserve',
+        annualFee: 550,
+        notes: 'Priority Pass, $300 travel credit',
+        categories: {
+            'travel': { rate: 3, details: '3x points on travel worldwide' },
+            'dining': { rate: 3, details: '3x points on dining worldwide' },
+            'airfare': { rate: 5, details: '5x on flights through Chase Travel' },
+            'hotels': { rate: 10, details: '10x on hotels through Chase Travel' },
+            'car rentals': { rate: 10, details: '10x on car rentals through Chase Travel' },
+            'general': { rate: 1, details: '1x on all other purchases' }
+        }
+    },
+    {
+        id: 'amazon-visa',
+        name: 'Amazon Visa',
+        annualFee: 0,
+        notes: 'Prime membership required for 5% back',
+        categories: {
+            'amazon': { rate: 5, details: '5% back at Amazon.com (with Prime)' },
+            'whole foods': { rate: 5, details: '5% back at Whole Foods (with Prime)' },
+            'gas stations': { rate: 2, details: '2% back at gas stations' },
+            'restaurants': { rate: 2, details: '2% back at restaurants' },
+            'transit': { rate: 2, details: '2% back on transit and commuting' },
+            'car rentals': { rate: 1, details: '1% back on car rentals (2% through Chase Travel)' },
+            'general': { rate: 1, details: '1% back on all other purchases' }
+        }
+    },
+    {
+        id: 'citi-costco',
+        name: 'Citi Costco',
+        annualFee: 0,
+        notes: 'Costco membership required',
+        categories: {
+            'gas stations': { rate: 4, details: '4% back on gas (up to $7,000/year)' },
+            'costco gas': { rate: 4, details: '4% back on Costco gas (up to $7,000/year)' },
+            'ev charging': { rate: 4, details: '4% back on EV charging (up to $7,000/year)' },
+            'travel': { rate: 3, details: '3% back on eligible travel purchases' },
+            'car rentals': { rate: 3, details: '3% back on car rentals' },
+            'restaurants': { rate: 3, details: '3% back at restaurants' },
+            'costco': { rate: 2, details: '2% back at Costco' },
+            'general': { rate: 1, details: '1% back on all other purchases' }
+        }
+    },
     {
         id: 'amex-platinum',
         name: 'Amex Platinum',
@@ -885,7 +930,7 @@ const defaultCards = [
         }
     },
     {
-id: 'amex-gold',
+        id: 'amex-gold',
         name: 'Amex Gold Card',
         annualFee: 325,
         notes: '$120 dining credit, $84 Dunkin credit',
@@ -1006,6 +1051,8 @@ id: 'amex-gold',
             'general': { rate: 1, details: '1x points on other purchases' }
         }
     },
+    
+    // New cards to add:
     {
         id: 'united-club-card',
         name: 'United Club Card',
@@ -1029,6 +1076,188 @@ id: 'amex-gold',
             'airfare': { rate: 5, details: '5x miles on flights booked through Capital One Travel' },
             'travel': { rate: 2, details: '2x miles on all other travel purchases' },
             'general': { rate: 2, details: '2x miles on all other purchases' }
+        }
+    },
+    {
+        id: 'chase-sapphire-preferred',
+        name: 'Chase Sapphire Preferred',
+        annualFee: 95,
+        notes: 'Great intro travel card, $50 annual hotel credit',
+        categories: {
+            'dining': { rate: 3, details: '3x points on dining worldwide' },
+            'online grocery': { rate: 3, details: '3x points on online grocery purchases' },
+            'streaming': { rate: 3, details: '3x points on select streaming services' },
+            'travel': { rate: 2, details: '2x points on travel worldwide' },
+            'hotels': { rate: 5, details: '5x on hotels through Chase Travel' },
+            'car rentals': { rate: 5, details: '5x on car rentals through Chase Travel' },
+            'airfare': { rate: 5, details: '5x on flights through Chase Travel' },
+            'general': { rate: 1, details: '1x points on all other purchases' }
+        }
+    },
+    {
+        id: 'amex-green',
+        name: 'Amex Green Card',
+        annualFee: 150,
+        notes: '$100 CLEAR credit, $100 LoungeBuddy credit',
+        categories: {
+            'travel': { rate: 3, details: '3x points on travel worldwide' },
+            'transit': { rate: 3, details: '3x points on transit' },
+            'restaurants': { rate: 3, details: '3x points at restaurants worldwide' },
+            'general': { rate: 1, details: '1x points on all other purchases' }
+        }
+    },
+    {
+        id: 'us-bank-cash-plus',
+        name: 'U.S. Bank Cash+ Visa',
+        annualFee: 0,
+        notes: 'Choose your own 5% categories',
+        categories: {
+            'custom-category-1': { rate: 5, details: '5% back on first chosen category (up to $2,000/quarter)' },
+            'custom-category-2': { rate: 5, details: '5% back on second chosen category (up to $2,000/quarter)' },
+            'grocery': { rate: 2, details: '2% back on grocery stores, gas stations, or restaurants' },
+            'general': { rate: 1, details: '1% back on all other purchases' }
+        }
+    },
+    {
+        id: 'amex-blue-business-plus',
+        name: 'Amex Blue Business Plus',
+        annualFee: 0,
+        notes: 'Great no-fee business card',
+        categories: {
+            'business': { rate: 2, details: '2x points on all business purchases (up to $50,000/year)' },
+            'general': { rate: 1, details: '1x points on all purchases above $50,000/year' }
+        }
+    },
+    {
+        id: 'southwest-priority',
+        name: 'Southwest Rapid Rewards Priority',
+        annualFee: 149,
+        notes: '7,500 anniversary points, $75 Southwest travel credit',
+        categories: {
+            'southwest': { rate: 3, details: '3x points on Southwest purchases' },
+            'car rentals': { rate: 2, details: '2x points on car rental partner purchases' },
+            'hotels': { rate: 2, details: '2x points on hotel partner purchases' },
+            'local transit': { rate: 2, details: '2x points on local transit and commuting' },
+            'general': { rate: 1, details: '1x points on all other purchases' }
+        }
+    },
+    {
+        id: 'marriott-bonvoy-brilliant',
+        name: 'Marriott Bonvoy Brilliant',
+        annualFee: 650,
+        notes: '$300 Marriott credit, free night award (up to 85,000 points)',
+        categories: {
+            'marriott': { rate: 6, details: '6x points at Marriott Bonvoy hotels' },
+            'restaurants': { rate: 3, details: '3x points at restaurants worldwide' },
+            'airfare': { rate: 3, details: '3x points on flights booked directly with airlines' },
+            'general': { rate: 2, details: '2x points on all other purchases' }
+        }
+    },
+    {
+        id: 'amex-delta-platinum',
+        name: 'Amex Delta SkyMiles Platinum',
+        annualFee: 250,
+        notes: 'Annual companion certificate, first checked bag free',
+        categories: {
+            'delta': { rate: 3, details: '3x miles on direct Delta purchases' },
+            'hotels': { rate: 3, details: '3x miles on hotels' },
+            'restaurants': { rate: 2, details: '2x miles at restaurants worldwide' },
+            'grocery': { rate: 2, details: '2x miles at U.S. supermarkets' },
+            'general': { rate: 1, details: '1x miles on all other purchases' }
+        }
+    },
+    {
+        id: 'discover-it-miles',
+        name: 'Discover it Miles',
+        annualFee: 0,
+        notes: 'Miles match at end of first year',
+        categories: {
+            'general': { rate: 1.5, details: '1.5x miles on all purchases (3x in first year with match)' }
+        }
+    },
+    {
+        id: 'apple-card',
+        name: 'Apple Card',
+        annualFee: 0,
+        notes: 'No fees, daily cash rewards',
+        categories: {
+            'apple': { rate: 3, details: '3% Daily Cash on Apple purchases' },
+            'apple pay': { rate: 2, details: '2% Daily Cash on purchases with Apple Pay' },
+            'general': { rate: 1, details: '1% Daily Cash on all other purchases' }
+        }
+    },
+    {
+        id: 'bank-of-america-premium',
+        name: 'Bank of America Premium Rewards',
+        annualFee: 95,
+        notes: '$100 airline credit, 25-75% rewards boost with Preferred Rewards',
+        categories: {
+            'travel': { rate: 2, details: '2x points on travel and dining' },
+            'dining': { rate: 2, details: '2x points on travel and dining' },
+            'general': { rate: 1.5, details: '1.5x points on all other purchases' }
+        }
+    },
+    {
+        id: 'us-bank-altitude-reserve',
+        name: 'U.S. Bank Altitude Reserve',
+        annualFee: 400,
+        notes: '$325 travel credit, Priority Pass membership',
+        categories: {
+            'travel': { rate: 5, details: '5x points on prepaid hotels and car rentals booked through the portal' },
+            'mobile wallet': { rate: 3, details: '3x points on mobile wallet purchases (Apple Pay, Google Pay, etc.)' },
+            'general': { rate: 1, details: '1x points on all other purchases' }
+        }
+    },
+    {
+        id: 'citi-premier',
+        name: 'Citi Premier Card',
+        annualFee: 95,
+        notes: '$100 annual hotel savings benefit',
+        categories: {
+            'restaurants': { rate: 3, details: '3x points at restaurants' },
+            'supermarkets': { rate: 3, details: '3x points at supermarkets' },
+            'gas stations': { rate: 3, details: '3x points at gas stations' },
+            'air travel': { rate: 3, details: '3x points on air travel' },
+            'hotels': { rate: 3, details: '3x points on hotels' },
+            'general': { rate: 1, details: '1x points on all other purchases' }
+        }
+    },
+    {
+        id: 'hilton-honors-aspire',
+        name: 'Hilton Honors Aspire',
+        annualFee: 450,
+        notes: 'Diamond status, $250 Hilton resort credit, free weekend night',
+        categories: {
+            'hilton': { rate: 14, details: '14x points on Hilton purchases' },
+            'restaurants': { rate: 7, details: '7x points at U.S. restaurants' },
+            'airfare': { rate: 7, details: '7x points on flights booked directly with airlines' },
+            'car rentals': { rate: 7, details: '7x points on car rentals booked directly' },
+            'general': { rate: 3, details: '3x points on all other purchases' }
+        }
+    },
+    {
+        id: 'chase-ink-business-preferred',
+        name: 'Chase Ink Business Preferred',
+        annualFee: 95,
+        notes: 'Cell phone protection, trip cancellation insurance',
+        categories: {
+            'travel': { rate: 3, details: '3x points on travel (up to $150,000/year combined)' },
+            'shipping': { rate: 3, details: '3x points on shipping (up to $150,000/year combined)' },
+            'advertising': { rate: 3, details: '3x points on select advertising (up to $150,000/year combined)' },
+            'internet': { rate: 3, details: '3x points on internet, cable, and phone (up to $150,000/year combined)' },
+            'general': { rate: 1, details: '1x points on all other purchases' }
+        }
+    },
+    {
+        id: 'amex-blue-cash-everyday',
+        name: 'Amex Blue Cash Everyday',
+        annualFee: 0,
+        notes: 'No annual fee grocery rewards',
+        categories: {
+            'grocery': { rate: 3, details: '3% cash back at U.S. supermarkets (up to $6,000/year)' },
+            'gas stations': { rate: 3, details: '3% cash back at U.S. gas stations (up to $6,000/year)' },
+            'online retail': { rate: 3, details: '3% cash back on U.S. online retail purchases (up to $6,000/year)' },
+            'general': { rate: 1, details: '1% cash back on other purchases' }
         }
     }
 ];
