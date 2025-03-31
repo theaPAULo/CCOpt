@@ -911,6 +911,7 @@ const analyzeCardsButton = document.getElementById('analyze-cards-button');
 const analysisResults = document.getElementById('analysis-results');
 
 // Default Credit Card Data
+// These are the 4 default cards
 const defaultCards = [
     {
         id: 'chase-sapphire-reserve',
@@ -957,6 +958,21 @@ const defaultCards = [
             'general': { rate: 1, details: '1% back on all other purchases' }
         }
     },
+    {
+        id: 'amex-platinum',
+        name: 'Amex Platinum',
+        annualFee: 695,
+        notes: 'Centurion lounge access, $200 airline fee credit',
+        categories: {
+            'airfare': { rate: 5, details: '5x points on flights booked directly with airlines or Amex Travel' },
+            'hotels': { rate: 5, details: '5x on prepaid hotels booked with Amex Travel' },
+            'car rentals': { rate: 1, details: '1x points on car rentals' },
+            'general': { rate: 1, details: '1x points on all other purchases' }
+        }
+    }
+];
+    // The full expanded list of additional cards
+const expandedCards = [
     {
         id: 'amex-gold',
         name: 'Amex Gold Card',
@@ -1050,6 +1066,94 @@ const defaultCards = [
         notes: 'Simple flat-rate cash back',
         categories: {
             'general': { rate: 2, details: '2% cash back on all purchases' }
+        }
+    },
+    {
+        id: 'bilt-mastercard',
+        name: 'Bilt Mastercard',
+        annualFee: 0,
+        notes: 'Earn points on rent with no fees',
+        categories: {
+            'dining': { rate: 3, details: '3x points on dining' },
+            'restaurants': { rate: 3, details: '3x points on dining' },
+            'travel': { rate: 2, details: '2x points on travel' },
+            'rent': { rate: 1, details: '1x points on rent payments with no fees (up to 100,000 points/year)' },
+            'general': { rate: 1, details: '1x points on other purchases' }
+        }
+    },
+    {
+        id: 'united-club-card',
+        name: 'United Club Card',
+        annualFee: 525,
+        notes: 'United Club membership, free first and second checked bags',
+        categories: {
+            'united': { rate: 4, details: '4x miles on United purchases' },
+            'travel': { rate: 2, details: '2x miles on all other travel' },
+            'dining': { rate: 2, details: '2x miles on dining' },
+            'general': { rate: 1, details: '1x miles on all other purchases' }
+        }
+    },
+    {
+        id: 'capital-one-venture-x',
+        name: 'Capital One Venture X',
+        annualFee: 395,
+        notes: '$300 annual travel credit, 10,000 anniversary miles',
+        categories: {
+            'hotels': { rate: 10, details: '10x miles on hotels booked through Capital One Travel' },
+            'car rentals': { rate: 10, details: '10x miles on car rentals booked through Capital One Travel' },
+            'airfare': { rate: 5, details: '5x miles on flights booked through Capital One Travel' },
+            'travel': { rate: 2, details: '2x miles on all other travel purchases' },
+            'general': { rate: 2, details: '2x miles on all other purchases' }
+        }
+    },
+    {
+        id: 'chase-sapphire-preferred',
+        name: 'Chase Sapphire Preferred',
+        annualFee: 95,
+        notes: 'Great intro travel card, $50 annual hotel credit',
+        categories: {
+            'dining': { rate: 3, details: '3x points on dining worldwide' },
+            'online grocery': { rate: 3, details: '3x points on online grocery purchases' },
+            'streaming': { rate: 3, details: '3x points on select streaming services' },
+            'travel': { rate: 2, details: '2x points on travel worldwide' },
+            'hotels': { rate: 5, details: '5x on hotels through Chase Travel' },
+            'car rentals': { rate: 5, details: '5x on car rentals through Chase Travel' },
+            'airfare': { rate: 5, details: '5x on flights through Chase Travel' },
+            'general': { rate: 1, details: '1x points on all other purchases' }
+        }
+    },
+    {
+        id: 'chase-freedom-flex',
+        name: 'Chase Freedom Flex',
+        annualFee: 0,
+        notes: 'Rotating 5% categories each quarter',
+        categories: {
+            'quarterly': { rate: 5, details: '5% back in rotating categories (up to $1,500 per quarter)' },
+            'travel': { rate: 5, details: '5% back on travel purchased through Chase Travel' },
+            'dining': { rate: 3, details: '3% back on dining at restaurants' },
+            'restaurants': { rate: 3, details: '3% back on dining at restaurants' },
+            'drugstore': { rate: 3, details: '3% back at drugstores' },
+            'general': { rate: 1, details: '1% back on all other purchases' }
+        }
+    },
+    {
+        id: 'citi-double-cash',
+        name: 'Citi Double Cash',
+        annualFee: 0,
+        notes: 'No annual fee, easy rewards structure',
+        categories: {
+            'general': { rate: 2, details: '2% back on everything (1% when you buy, 1% when you pay)' }
+        }
+    },
+    {
+        id: 'capital-one-venture',
+        name: 'Capital One Venture',
+        annualFee: 95,
+        notes: 'Easy to redeem travel rewards',
+        categories: {
+            'hotels': { rate: 5, details: '5x miles on hotels and rental cars booked through Capital One Travel' },
+            'car rentals': { rate: 5, details: '5x miles on hotels and rental cars booked through Capital One Travel' },
+            'general': { rate: 2, details: '2x miles on every purchase' }
         }
     },
     {
@@ -1290,6 +1394,9 @@ const defaultCards = [
     }
 ];
 
+// Combine the default and expanded cards for the full catalog
+const allCards = [...defaultCards, ...expandedCards];
+    
     // Category mapping
 const categoryMap = {
     'restaurants': 'restaurants',
@@ -1374,6 +1481,7 @@ const cardDatabaseVersion = {
 };
 
     // Initialize the app
+// Initialize the app - update to load the new card structure
 function initApp() {
     // Load cards from localStorage or use defaults
     loadCards();
@@ -1386,7 +1494,7 @@ function initApp() {
     categorySelect.addEventListener('change', handleCategoryChange);
     customCategoryInput.addEventListener('input', handleCustomCategoryInput);
     
-    // New tab handling that will work with any number of tabs
+    // Tab switching
     const tabs = document.querySelectorAll('.tab');
     tabs.forEach(tab => {
         tab.addEventListener('click', function() {
@@ -1420,7 +1528,8 @@ function loadCards() {
     if (savedCards) {
         cardsData = JSON.parse(savedCards);
     } else {
-        cardsData = [...defaultCards];
+        // Start with just the default cards
+        cardsData = JSON.parse(JSON.stringify(defaultCards));
         saveCardsToStorage();
     }
 }
@@ -1430,26 +1539,6 @@ function saveCardsToStorage() {
     localStorage.setItem('creditCards', JSON.stringify(cardsData));
 }
 
-
-
-// Replace your resetToDefaultCards function with this version
-function resetToDefaultCards() {
-    if (confirm('Are you sure you want to reset to default cards? This will remove any custom cards you\'ve added.')) {
-        // Create a deep copy of the default cards to ensure we don't have reference issues
-        cardsData = JSON.parse(JSON.stringify(defaultCards));
-        
-        // Make sure to clear and reload from localStorage
-        localStorage.removeItem('creditCards');
-        saveCardsToStorage();
-        
-        // Re-render both card displays
-        renderCardsOptimize();
-        renderCardsManage();
-        
-        // Show confirmation to the user
-        showNotification('Cards reset to defaults');
-    }
-}
 
 // Render cards in the Optimize tab
 function renderCardsOptimize() {
@@ -1550,12 +1639,11 @@ function openAddCardModal() {
     cardModal.classList.add('active');
 }
 
-// This is a very simplified approach that should work reliably
-
+// This function needs to be updated to use the allCards array for dropdown selection
 function populateCardFromPreset() {
     const selectCardDropdown = document.getElementById('preset-card-select');
     
-    // Start fresh by clearing all options
+    // Clear existing options
     selectCardDropdown.innerHTML = '';
     
     // Add the Custom Card option
@@ -1564,55 +1652,44 @@ function populateCardFromPreset() {
     customOption.textContent = 'Custom Card';
     selectCardDropdown.appendChild(customOption);
     
-    // Define which cards are "popular" (original) vs "additional" (expanded)
-    // Original cards are the first 14 in your array
-    const popularCards = defaultCards.slice(0, 14);
-    const additionalCards = defaultCards.slice(14);
+    // Add a header for default cards
+    const popularHeader = document.createElement('option');
+    popularHeader.disabled = true;
+    popularHeader.textContent = '--- Popular Cards ---';
+    selectCardDropdown.appendChild(popularHeader);
     
-    // Check if we have popular cards to add
-    if (popularCards.length > 0) {
-        // Add a header for popular cards
-        const popularHeader = document.createElement('option');
-        popularHeader.disabled = true;
-        popularHeader.textContent = '--- Popular Cards ---';
-        selectCardDropdown.appendChild(popularHeader);
-        
-        // Add each popular card that's not already in the user's collection
-        popularCards.forEach(card => {
-            if (!cardsData.some(c => c.id === card.id)) {
-                const option = document.createElement('option');
-                option.value = card.id;
-                option.textContent = card.name;
-                selectCardDropdown.appendChild(option);
-            }
-        });
-    }
+    // Add each default card that's not already in the user's collection
+    defaultCards.forEach(card => {
+        if (!cardsData.some(c => c.id === card.id)) {
+            const option = document.createElement('option');
+            option.value = card.id;
+            option.textContent = card.name;
+            selectCardDropdown.appendChild(option);
+        }
+    });
     
-    // Check if we have additional cards to add
-    if (additionalCards.length > 0) {
-        // Add a header for additional cards
-        const additionalHeader = document.createElement('option');
-        additionalHeader.disabled = true;
-        additionalHeader.textContent = '--- Additional Cards ---';
-        selectCardDropdown.appendChild(additionalHeader);
-        
-        // Add each additional card that's not already in the user's collection
-        additionalCards.forEach(card => {
-            if (!cardsData.some(c => c.id === card.id)) {
-                const option = document.createElement('option');
-                option.value = card.id;
-                option.textContent = card.name;
-                selectCardDropdown.appendChild(option);
-            }
-        });
-    }
+    // Add a header for expanded cards
+    const expandedHeader = document.createElement('option');
+    expandedHeader.disabled = true;
+    expandedHeader.textContent = '--- Additional Cards ---';
+    selectCardDropdown.appendChild(expandedHeader);
     
-    // Use direct assignment for the change handler - simpler and more reliable
+    // Add each expanded card that's not already in the user's collection
+    expandedCards.forEach(card => {
+        if (!cardsData.some(c => c.id === card.id)) {
+            const option = document.createElement('option');
+            option.value = card.id;
+            option.textContent = card.name;
+            selectCardDropdown.appendChild(option);
+        }
+    });
+    
+    // Set the onchange handler
     selectCardDropdown.onchange = function() {
         const selectedCardId = this.value;
         if (selectedCardId) {
-            // Find the selected card
-            const selectedCard = defaultCards.find(card => card.id === selectedCardId);
+            // Find the selected card from the combined list
+            const selectedCard = allCards.find(card => card.id === selectedCardId);
             if (selectedCard) {
                 // Populate the form with the selected card's details
                 cardNameInput.value = selectedCard.name;
@@ -1637,6 +1714,25 @@ function populateCardFromPreset() {
         }
     };
 }
+
+// Update reset function to only use the default cards
+function resetToDefaultCards() {
+    if (confirm('Are you sure you want to reset to default cards? This will remove any custom cards you\'ve added.')) {
+        // Create a deep copy of just the default cards
+        cardsData = JSON.parse(JSON.stringify(defaultCards));
+        
+        // Save to localStorage
+        saveCardsToStorage();
+        
+        // Re-render card lists
+        renderCardsOptimize();
+        renderCardsManage();
+        
+        // Show confirmation
+        showNotification('Cards reset to defaults');
+    }
+}
+
 
 // Open modal to edit an existing card
 function openEditCardModal(cardId) {
