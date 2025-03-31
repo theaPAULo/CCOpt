@@ -393,47 +393,42 @@ optgroup {
     padding-right: 8px;
 }
 
-/* Ensure the dropdown options are visible */
+/* Make sure the dropdown is fully visible */
+#preset-card-select {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    font-size: 16px;
+    background-color: white;
+    transition: all 0.3s ease;
+}
+
+/* Style the dropdown when expanded */
+#preset-card-select:focus {
+    outline: none;
+    border-color: #4299e1;
+    box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.15);
+}
+
+/* Style the disabled options (headers) */
+#preset-card-select option:disabled {
+    font-weight: bold;
+    color: #3182ce;
+    background-color: #f0f4f8;
+    padding: 4px;
+}
+
+/* Style the regular options */
 #preset-card-select option {
-    padding: 8px;
+    padding: 8px 12px;
+    background-color: white;
 }
 
-/* Optgroup styling */
-#preset-card-select optgroup {
-    padding: 6px 0;
-}
-
-/* Make sure the reward categories have proper spacing */
-.reward-category {
-    display: flex;
-    margin-bottom: 12px;
-    align-items: center;
-    flex-wrap: wrap;  /* Allow wrapping on small screens */
-}
-
-.reward-category input {
-    margin-right: 8px;
-    margin-bottom: 4px;  /* Add some bottom margin for when inputs wrap */
-}
-
-/* Responsive adjustments for small screens */
+/* Fix mobile styling */
 @media (max-width: 640px) {
-    .modal-content {
-        max-width: 95%;  /* Take up more width on small screens */
-        padding: 16px;   /* Reduce padding on small screens */
-    }
-    
-    .reward-category {
-        flex-wrap: wrap;
-    }
-    
-    .reward-category input[type="text"] {
-        width: calc(100% - 16px);
-        margin-bottom: 8px;
-    }
-    
-    .reward-category input[type="number"] {
-        width: 60px;
+    #preset-card-select {
+        font-size: 16px; /* Prevent zoom on iOS */
     }
 }
         
@@ -840,6 +835,7 @@ optgroup {
                 <label for="preset-card-select">Select a popular card or create custom:</label>
                 <select id="preset-card-select">
                     <option value="">Custom Card</option>
+                    <!-- Cards will be populated by JavaScript -->
                 </select>
             </div>
             
@@ -1566,6 +1562,94 @@ function openAddCardModal() {
     
     editingCardId = null;
     cardModal.classList.add('active');
+}
+
+// This is a very simplified approach that should work reliably
+
+function populateCardFromPreset() {
+    const selectCardDropdown = document.getElementById('preset-card-select');
+    
+    // Start fresh by clearing all options
+    selectCardDropdown.innerHTML = '';
+    
+    // Add the Custom Card option
+    const customOption = document.createElement('option');
+    customOption.value = '';
+    customOption.textContent = 'Custom Card';
+    selectCardDropdown.appendChild(customOption);
+    
+    // Define which cards are "popular" (original) vs "additional" (expanded)
+    // Original cards are the first 14 in your array
+    const popularCards = defaultCards.slice(0, 14);
+    const additionalCards = defaultCards.slice(14);
+    
+    // Check if we have popular cards to add
+    if (popularCards.length > 0) {
+        // Add a header for popular cards
+        const popularHeader = document.createElement('option');
+        popularHeader.disabled = true;
+        popularHeader.textContent = '--- Popular Cards ---';
+        selectCardDropdown.appendChild(popularHeader);
+        
+        // Add each popular card that's not already in the user's collection
+        popularCards.forEach(card => {
+            if (!cardsData.some(c => c.id === card.id)) {
+                const option = document.createElement('option');
+                option.value = card.id;
+                option.textContent = card.name;
+                selectCardDropdown.appendChild(option);
+            }
+        });
+    }
+    
+    // Check if we have additional cards to add
+    if (additionalCards.length > 0) {
+        // Add a header for additional cards
+        const additionalHeader = document.createElement('option');
+        additionalHeader.disabled = true;
+        additionalHeader.textContent = '--- Additional Cards ---';
+        selectCardDropdown.appendChild(additionalHeader);
+        
+        // Add each additional card that's not already in the user's collection
+        additionalCards.forEach(card => {
+            if (!cardsData.some(c => c.id === card.id)) {
+                const option = document.createElement('option');
+                option.value = card.id;
+                option.textContent = card.name;
+                selectCardDropdown.appendChild(option);
+            }
+        });
+    }
+    
+    // Use direct assignment for the change handler - simpler and more reliable
+    selectCardDropdown.onchange = function() {
+        const selectedCardId = this.value;
+        if (selectedCardId) {
+            // Find the selected card
+            const selectedCard = defaultCards.find(card => card.id === selectedCardId);
+            if (selectedCard) {
+                // Populate the form with the selected card's details
+                cardNameInput.value = selectedCard.name;
+                annualFeeInput.value = selectedCard.annualFee;
+                notesInput.value = selectedCard.notes || '';
+                
+                // Clear existing categories
+                rewardCategoriesContainer.innerHTML = '';
+                
+                // Add categories from the selected card
+                Object.entries(selectedCard.categories).forEach(([category, details]) => {
+                    addRewardCategory(category, details.rate, details.details);
+                });
+            }
+        } else {
+            // Reset form for custom card
+            cardNameInput.value = '';
+            annualFeeInput.value = '';
+            notesInput.value = '';
+            rewardCategoriesContainer.innerHTML = '';
+            addRewardCategory(); // Add one empty category
+        }
+    };
 }
 
 // Open modal to edit an existing card
