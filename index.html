@@ -739,6 +739,34 @@ optgroup {
     animation: spin 1s linear infinite;
 }
 
+/* Add this to your CSS */
+.tied-cards {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+.tied-card {
+    background-color: var(--neutral-light);
+    padding: 12px;
+    border-radius: 8px;
+    border-left: 3px solid var(--primary-dark);
+    flex: 1;
+    min-width: 120px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.tied-card-name {
+    font-weight: 600;
+    margin-bottom: 5px;
+}
+
+.tied-card-rate {
+    color: var(--success-color);
+    font-weight: 500;
+}
+
 @keyframes spin {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
@@ -792,6 +820,10 @@ optgroup {
                 <div class="best-card" id="best-card-name">Card Name</div>
                 <div class="reward-rate" id="reward-rate">5x rewards</div>
                 <p class="reward-details" id="reward-details">Details about the reward</p>
+                <!-- Add this new tied cards container -->
+                <div class="tied-cards" id="tied-cards-container" style="display: none;">
+                    <!-- Tied cards will be added here dynamically -->
+                </div>
             </div>
             
             <div class="cards-list" id="cards-list-optimize">
@@ -1483,6 +1515,7 @@ function renderCardsOptimize() {
     });
 }
 
+
 // Render cards in the Manage tab
 function renderCardsManage() {
     cardsListManage.innerHTML = '<h2 class="cards-title">Your Cards</h2>';
@@ -1809,15 +1842,15 @@ function showNotification(message, isError = false) {
     }, 3000);
 }
 
-    // Update result for a category
+// Updated updateResult function to handle ties
 function updateResult(category) {
     const searchCategory = category.toLowerCase();
     
     // Try to map the search category to a standard category
     const mappedCategory = categoryMap[searchCategory] || searchCategory;
     
-    // Find the best card for this category
-    let bestCard = null;
+    // Find the best cards for this category
+    let bestCards = [];
     let bestRate = 0;
     let bestDetails = '';
     
@@ -1825,25 +1858,59 @@ function updateResult(category) {
         // Check each category in the card
         for (const [cardCategory, details] of Object.entries(card.categories)) {
             // Check if this category matches or is an alias
-            if ((cardCategory === mappedCategory || categoryMap[cardCategory] === mappedCategory) && details.rate > bestRate) {
-                bestCard = card.name;
-                bestRate = details.rate;
-                bestDetails = details.details;
+            if ((cardCategory === mappedCategory || categoryMap[cardCategory] === mappedCategory)) {
+                if (details.rate > bestRate) {
+                    // New best card found
+                    bestCards = [card.name];
+                    bestRate = details.rate;
+                    bestDetails = details.details;
+                } else if (details.rate === bestRate && bestRate > 0) {
+                    // Tie found, add to array
+                    bestCards.push(card.name);
+                }
             }
         }
         
         // If no specific category match found, check for general rate
-        if (!bestCard && card.categories.general && (bestRate === 0 || card.categories.general.rate > bestRate)) {
-            bestCard = card.name;
-            bestRate = card.categories.general.rate;
-            bestDetails = card.categories.general.details;
+        if (bestCards.length === 0 && card.categories.general) {
+            if (bestRate === 0 || card.categories.general.rate > bestRate) {
+                bestCards = [card.name];
+                bestRate = card.categories.general.rate;
+                bestDetails = card.categories.general.details;
+            } else if (card.categories.general.rate === bestRate) {
+                bestCards.push(card.name);
+            }
         }
     });
     
     // Update the UI
-    if (bestCard) {
+    if (bestCards.length > 0) {
         resultCategory.textContent = " " + category;
-        bestCardName.textContent = bestCard;
+        
+        // Display differently based on whether there's a tie
+        if (bestCards.length === 1) {
+            bestCardName.textContent = bestCards[0];
+            document.getElementById('tied-cards-container').style.display = 'none';
+        } else {
+            // Format for multiple cards (ties)
+            bestCardName.innerHTML = `<span style="color: var(--primary-dark);">Tie:</span> ${bestCards.join(' or ')}`;
+            
+            // Show tied cards visually
+            const tiedCardsContainer = document.getElementById('tied-cards-container');
+            tiedCardsContainer.style.display = 'flex';
+            tiedCardsContainer.innerHTML = '';
+            
+            bestCards.forEach(cardName => {
+                const cardElement = document.createElement('div');
+                cardElement.className = 'tied-card';
+                cardElement.innerHTML = `
+                    <div class="tied-card-name">${cardName}</div>
+                    <div class="tied-card-rate">${bestRate}x</div>
+                `;
+                tiedCardsContainer.appendChild(cardElement);
+            });
+        }
+        
         rewardRate.textContent = bestRate + 'x rewards';
         rewardDetails.textContent = bestDetails;
         resultCard.style.display = 'block';
