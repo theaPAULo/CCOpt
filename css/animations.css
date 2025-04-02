@@ -1,0 +1,183 @@
+/* Enhanced Animations and Motion Design */
+
+/* Define animation keyframes */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes fadeOut {
+    from { opacity: 1; }
+    to { opacity: 0; }
+}
+
+@keyframes slideInRight {
+    from { transform: translateX(20px); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes slideInUp {
+    from { transform: translateY(20px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes pulseGlow {
+    0% { box-shadow: 0 0 0 0 rgba(93, 95, 239, 0.4); }
+    70% { box-shadow: 0 0 0 10px rgba(93, 95, 239, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(93, 95, 239, 0); }
+}
+
+@keyframes shimmer {
+    0% { background-position: -100% 0; }
+    100% { background-position: 200% 0; }
+}
+
+/* Apply animations to elements */
+.tab-content {
+    animation: fadeIn 0.4s ease-out;
+}
+
+.best-card, .reward-rate, .reward-details {
+    animation-duration: 0.5s;
+    animation-fill-mode: both;
+    animation-timing-function: ease-out;
+}
+
+.tab.active::after {
+    animation: shimmer 2s infinite;
+}
+
+button:hover {
+    animation: pulseGlow 1.5s infinite;
+}
+
+/* Loading indicators */
+.loading-spinner {
+    display: inline-block;
+    width: 1.5rem;
+    height: 1.5rem;
+    border: 3px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    border-top-color: white;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* Card transition effects */
+.card-item {
+    transition: all 0.3s ease;
+}
+
+.cards-list .card-item {
+    animation: slideInUp 0.4s ease-out;
+    animation-fill-mode: both;
+}
+
+.cards-list .card-item:nth-child(2) { animation-delay: 0.05s; }
+.cards-list .card-item:nth-child(3) { animation-delay: 0.1s; }
+.cards-list .card-item:nth-child(4) { animation-delay: 0.15s; }
+.cards-list .card-item:nth-child(5) { animation-delay: 0.2s; }
+.cards-list .card-item:nth-child(6) { animation-delay: 0.25s; }
+.cards-list .card-item:nth-child(7) { animation-delay: 0.3s; }
+.cards-list .card-item:nth-child(8) { animation-delay: 0.35s; }
+.cards-list .card-item:nth-child(9) { animation-delay: 0.4s; }
+.cards-list .card-item:nth-child(10) { animation-delay: 0.45s; }
+
+/* Tab switch animations */
+.tab-content {
+    position: relative;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.tab-content.active {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Card hover effects */
+.card-item:hover {
+    transform: translateY(-3px);
+}
+
+.card-item:active {
+    transform: translateY(0);
+}
+
+/* Button press effects */
+button:active {
+    transform: scale(0.97);
+}
+
+/* Card expand/collapse animations */
+.card-details {
+    transition: all 0.3s ease-out;
+    overflow: hidden;
+    max-height: 0;
+}
+
+.card-details.active {
+    max-height: 1000px; /* Large enough to accommodate content */
+}
+
+/* Reward rate pulse effect */
+.reward-rate {
+    position: relative;
+    overflow: hidden;
+}
+
+.reward-rate::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transform: translateX(-100%);
+    animation: shimmerEffect 2.5s infinite;
+}
+
+@keyframes shimmerEffect {
+    100% { transform: translateX(100%); }
+}
+
+/* Form focus effects */
+input:focus, select:focus {
+    animation: focusGlow 1.5s infinite alternate;
+}
+
+@keyframes focusGlow {
+    0% { box-shadow: 0 0 0 3px rgba(93, 95, 239, 0.1); }
+    100% { box-shadow: 0 0 0 3px rgba(93, 95, 239, 0.2); }
+}
+
+/* Smooth scrolling for the whole page */
+html {
+    scroll-behavior: smooth;
+}
+
+/* Ripple effect for buttons */
+button {
+    position: relative;
+    overflow: hidden;
+}
+
+button .ripple {
+    position: absolute;
+    border-radius: 50%;
+    transform: scale(0);
+    animation: rippleEffect 0.6s linear;
+    background-color: rgba(255, 255, 255, 0.3);
+}
+
+@keyframes rippleEffect {
+    to {
+        transform: scale(4);
+        opacity: 0;
+    }
+}

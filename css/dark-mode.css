@@ -1,0 +1,180 @@
+/* Dark Mode Styles */
+.dark-mode-toggle {
+    background: rgba(255, 255, 255, 0.2);
+    border: none;
+    width: 2.5rem;
+    height: 2.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 1.25rem;
+    color: white;
+    box-shadow: none;
+    transition: all var(--transition-fast);
+}
+
+.dark-mode-toggle:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: none;
+}
+
+body.dark-mode {
+    background-color: var(--neutral-900);
+    color: var(--neutral-200);
+}
+
+/* Container */
+body.dark-mode .container {
+    background-color: var(--neutral-800);
+    box-shadow: var(--shadow-xl);
+}
+
+/* Tabs */
+body.dark-mode .tabs {
+    background-color: var(--neutral-800);
+    border-bottom-color: var(--neutral-700);
+}
+
+body.dark-mode .tab {
+    color: var(--neutral-400);
+}
+
+body.dark-mode .tab:hover {
+    color: var(--primary-light);
+    background-color: var(--neutral-700);
+}
+
+body.dark-mode .tab.active {
+    color: var(--primary-light);
+    background-color: var(--neutral-800);
+}
+
+/* Cards */
+body.dark-mode .card-item {
+    background-color: var(--neutral-800);
+    border-color: var(--neutral-700);
+}
+
+body.dark-mode .card-header {
+    background-color: var(--neutral-800);
+}
+
+body.dark-mode .card-header:hover {
+    background-color: var(--neutral-700);
+}
+
+body.dark-mode .card-name {
+    color: var(--neutral-200);
+}
+
+body.dark-mode .card-details {
+    background-color: var(--neutral-800);
+    border-top-color: var(--neutral-700);
+}
+
+body.dark-mode .detail-title {
+    color: var(--primary-light);
+}
+
+body.dark-mode .detail-list li {
+    background-color: var(--neutral-700);
+}
+
+body.dark-mode .detail-list li:hover {
+    background-color: var(--neutral-600);
+}
+
+/* Form Elements */
+body.dark-mode input, 
+body.dark-mode select {
+    background-color: var(--neutral-700);
+    border-color: var(--neutral-600);
+    color: var(--neutral-200);
+}
+
+body.dark-mode input:hover, 
+body.dark-mode select:hover {
+    border-color: var(--neutral-500);
+}
+
+body.dark-mode input:focus, 
+body.dark-mode select:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(93, 95, 239, 0.3);
+}
+
+body.dark-mode select {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23CBD5E1' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+}
+
+/* Buttons */
+body.dark-mode button.btn-secondary {
+    background-color: var(--neutral-600);
+    color: var(--neutral-200);
+}
+
+body.dark-mode button.btn-secondary:hover {
+    background-color: var(--neutral-500);
+}
+
+/* Result Card */
+body.dark-mode .result-card {
+    background-color: var(--neutral-800);
+}
+
+body.dark-mode .best-card {
+    color: var(--neutral-200);
+}
+
+body.dark-mode .reward-details {
+    color: var(--neutral-400);
+    border-left-color: var(--neutral-600);
+}
+
+/* Categories Section */
+body.dark-mode .categories-section {
+    background-color: var(--neutral-800);
+    border-color: var(--neutral-700);
+}
+
+body.dark-mode .categories-title {
+    color: var(--neutral-300);
+}
+
+body.dark-mode .reward-category {
+    background-color: var(--neutral-700);
+    border-color: var(--neutral-600);
+}
+
+/* Modal */
+body.dark-mode .modal-content {
+    background-color: var(--neutral-800);
+}
+
+body.dark-mode .modal-body {
+    background-color: var(--neutral-800);
+}
+
+body.dark-mode .modal-footer {
+    background-color: var(--neutral-700);
+    border-top-color: var(--neutral-600);
+}
+
+/* Badges */
+body.dark-mode .badge {
+    background-color: var(--neutral-700);
+    color: var(--neutral-300);
+}
+
+/* Floating Action Button */
+body.dark-mode .fab-item {
+    background-color: var(--neutral-600);
+}
+
+/* Animation for switching modes */
+body, .container, .card-item, .card-header, .card-details, 
+input, select, button, .tabs, .tab, .result-card {
+    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+}

@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Credit Card Optimizer</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/dark-mode.css">
+    <link rel="stylesheet" href="css/responsive.css">
+    <link rel="stylesheet" href="css/animations.css">
+</head>
+<body>
+    <div class="container">
+        <div class="app-header">
+            <h1 class="app-title">Credit Card Optimizer</h1>
+            <!-- Dark mode toggle will be added here by JavaScript -->
+        </div>
+        
+        <div class="tabs">
+            <button class="tab active" data-tab="optimize">Optimize</button>
+            <button class="tab" data-tab="manage">Manage Cards</button>
+        </div>
+        
+        <div class="tab-content active" id="optimize-tab">
+            <div class="form-group">
+                <label for="category-select">What are you buying?</label>
+                <select id="category-select">
+                    <option value="">Select a category</option>
+                    <option value="Amazon">Amazon</option>
+                    <option value="Airfare">Airfare</option>
+                    <option value="Car Rentals">Car Rentals</option>
+                    <option value="Dining">Dining</option>
+                    <option value="Gas Stations">Gas Stations</option>
+                    <option value="Grocery">Grocery</option>
+                    <option value="Hotels">Hotels</option>
+                    <option value="Costco">Costco</option>
+                    <option value="Streaming Services">Streaming Services</option>
+                    <option value="Transit">Transit</option>
+                    <option value="Travel">Travel</option>
+                    <option value="Whole Foods">Whole Foods</option>
+                    <option value="Other">Other</option>
+                </select>
+            </div>
+            
+            <div class="form-group" id="custom-category-group" style="display: none;">
+                <label for="custom-category">Specify category or merchant:</label>
+                <input type="text" id="custom-category" placeholder="Enter store or category">
+            </div>
+            
+            <div class="result-card" id="result-card">
+                <div class="result-card-header">
+                    <h2 class="result-title">
+                        Best Card for <span id="result-category">Category</span>
+                    </h2>
+                </div>
+                <div class="result-card-body">
+                    <div class="best-card" id="best-card-name">Card Name</div>
+                    <div class="reward-rate" id="reward-rate">5x rewards</div>
+                    <p class="reward-details" id="reward-details">Details about the reward</p>
+                </div>
+            </div>
+            
+            <div class="cards-list" id="cards-list-optimize">
+                <h2 class="cards-title">Your Cards</h2>
+                <!-- Cards will be populated here -->
+            </div>
+        </div>
+        
+        <div class="tab-content" id="manage-tab">
+            <div class="form-group">
+                <button id="add-card-button" class="btn-primary">Add New Card</button>
+                <button id="reset-cards-button" class="btn-secondary">Reset to Default Cards</button>
+            </div>
+            
+            <div class="cards-list" id="cards-list-manage">
+                <h2 class="cards-title">Your Cards</h2>
+                <!-- Cards will be populated here -->
+            </div>
+        </div>
+    </div>
+    
+    <div class="modal" id="card-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title" id="modal-title">Add Credit Card</h2>
+                <button class="modal-close" id="modal-close">&times;</button>
+            </div>
+            
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="preset-card-select">Select a popular card or create custom:</label>
+                    <select id="preset-card-select">
+                        <option value="">Custom Card</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="card-name">Card Name:</label>
+                    <input type="text" id="card-name" placeholder="e.g., Chase Sapphire Preferred">
+                </div>
+                
+                <div class="form-group">
+                    <label for="annual-fee">Annual Fee ($):</label>
+                    <input type="number" id="annual-fee" placeholder="0">
+                </div>
+                
+                <div class="form-group">
+                    <label for="notes">Additional Notes:</label>
+                    <input type="text" id="notes" placeholder="e.g., Requires membership">
+                </div>
+                
+                <div class="categories-section">
+                    <h3 class="categories-title">Reward Categories</h3>
+                    <div id="reward-categories-container" class="reward-categories-container">
+                        <!-- Reward categories will be added here -->
+                    </div>
+                    <button class="btn-primary" id="add-category-button">+ Add Category</button>
+                </div>
+            </div>
+            
+            <div class="modal-footer">
+                <button class="btn-secondary" id="cancel-button">Cancel</button>
+                <button class="btn-primary" id="save-card-button">Save Card</button>
+            </div>
+        </div>
+    </div>
+    
+    <div class="notification" id="notification">
+        Card saved successfully!
+    </div>
+
+    <!-- Floating Action Button for mobile -->
+    <div class="fab-container">
+        <div class="fab-menu" id="fab-menu">
+            <div class="fab-item" id="fab-add-card">
+                <span>Add New Card</span>
+            </div>
+            <div class="fab-item" id="fab-reset-cards">
+                <span>Reset Cards</span>
+            </div>
+        </div>
+        <button class="fab" id="fab-button">+</button>
+    </div>
+
+    <!-- JavaScript Files -->
+    <script src="js/cards.js"></script>
+    <script src="js/ui-enhancements.js"></script>
+    <script src="js/animations.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
