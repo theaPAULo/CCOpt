@@ -434,31 +434,31 @@ function updateResult(category) {
         }
     });
     
-    // Update the UI
-    if (bestCard) {
-        resultCategory.textContent = " " + category;
-        bestCardName.textContent = bestCard;
-        rewardRate.textContent = bestRate + 'x rewards';
-        rewardDetails.textContent = bestDetails;
-        
-        // Hide first to reset animations
-        resultCard.style.display = 'none';
-        
-        // Force reflow to restart animation
-        void resultCard.offsetWidth;
-        
-        // Show with animation
-        resultCard.classList.add('active');
-    } else {
-        resultCard.classList.remove('active');
-        
-        // Hide after animation
-        setTimeout(() => {
-            if (!resultCard.classList.contains('active')) {
-                resultCard.style.display = 'none';
-            }
-        }, 300);
-    }
+// Update the UI
+if (bestCard) {
+    resultCategory.textContent = " " + category;
+    bestCardName.textContent = bestCard;
+    rewardRate.textContent = bestRate + 'x rewards';
+    rewardDetails.textContent = bestDetails;
+    
+    // Set display block first, then add the active class
+    resultCard.style.display = 'block';
+    
+    // Force reflow to restart animation
+    void resultCard.offsetWidth;
+    
+    // Show with animation
+    resultCard.classList.add('active');
+} else {
+    resultCard.classList.remove('active');
+    
+    // Hide after animation
+    setTimeout(() => {
+        if (!resultCard.classList.contains('active')) {
+            resultCard.style.display = 'none';
+        }
+    }, 300);
+}
 }
 
 // Enhanced toggle card details for smoother animation
