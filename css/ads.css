@@ -1,0 +1,71 @@
+/* ===== CREATE A NEW FILE: css/ads.css ===== */
+
+/* Ad Container Styles */
+.ad-container {
+    margin: 1rem 0;
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    background-color: var(--neutral-50);
+    transition: background-color 0.3s ease;
+}
+
+body.dark-mode .ad-container {
+    background-color: var(--neutral-700);
+}
+
+.ad-label {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05rem;
+    color: var(--neutral-500);
+    padding: 0.25rem 0.5rem;
+    background-color: rgba(0, 0, 0, 0.05);
+    text-align: center;
+}
+
+body.dark-mode .ad-label {
+    color: var(--neutral-400);
+    background-color: rgba(0, 0, 0, 0.2);
+}
+
+.ad-slot {
+    width: 100%;
+    min-height: 90px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Side ad positioning */
+.content-with-ads {
+    display: flex;
+    justify-content: center;
+    max-width: 1200px;
+    margin: 0 auto;
+    gap: 1.5rem;
+}
+
+.side-ad {
+    width: 160px;
+    height: fit-content;
+    position: sticky;
+    top: 2rem;
+}
+
+/* Hide side ad on smaller screens */
+@media (max-width: 1200px) {
+    .side-ad {
+        display: none;
+    }
+}
+
+/* Make top and bottom ads responsive */
+@media (max-width: 768px) {
+    .ad-container {
+        margin: 0.5rem 0;
+    }
+    
+    .ad-slot {
+        min-height: 50px;
+    }
+}

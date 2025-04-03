@@ -9,6 +9,9 @@ function initApp() {
     
     // Add dark mode toggle
     addDarkModeToggle();
+
+    initAdminAndAds();
+
     
     // Add event listeners
     categorySelect.addEventListener('change', handleCategoryChange);
@@ -114,6 +117,135 @@ function shareCardCategory(category) {
     
     showNotification(`Link to "${category}" copied to clipboard!`);
 }
+
+// ===== ADD THIS TO js/app.js =====
+
+// Admin and Ad management
+function initAdminAndAds() {
+    // Check if user is admin
+    const isAdmin = localStorage.getItem('ccOptimizer_isAdmin') === 'true';
+    
+    // Only show ads for non-admin users
+    if (!isAdmin) {
+        createAdContainers();
+        loadAds();
+    }
+    
+    // Add a hidden admin login functionality
+    // This creates a simple keycode sequence detector for admin login
+    // Default sequence is 'optimize' (type it when on the site)
+    let adminKeySequence = '';
+    document.addEventListener('keydown', function(e) {
+        adminKeySequence += e.key.toLowerCase();
+        
+        // Keep only the last 8 characters
+        if (adminKeySequence.length > 8) {
+            adminKeySequence = adminKeySequence.substring(adminKeySequence.length - 8);
+        }
+        
+        // Check for admin activation sequence
+        if (adminKeySequence === 'optimize') {
+            toggleAdminStatus();
+            adminKeySequence = '';
+        }
+    });
+}
+
+// Toggle admin status
+function toggleAdminStatus() {
+    const isCurrentlyAdmin = localStorage.getItem('ccOptimizer_isAdmin') === 'true';
+    
+    if (isCurrentlyAdmin) {
+        localStorage.setItem('ccOptimizer_isAdmin', 'false');
+        showNotification('Admin mode disabled. Ads will show after refresh.');
+    } else {
+        // Show a password prompt for additional security
+        const password = prompt('Enter admin password:');
+        
+        // You should replace 'yourSecurePassword' with a strong password
+        // In a production environment, consider using a more secure authentication method
+        if (password === 'yourSecurePassword') {
+            localStorage.setItem('ccOptimizer_isAdmin', 'true');
+            showNotification('Admin mode enabled. Ads will be hidden after refresh.');
+        } else if (password !== null) {
+            showNotification('Incorrect password!', true);
+        }
+    }
+}
+
+// Create ad containers in strategic locations
+function createAdContainers() {
+    // Top banner ad
+    const topAdContainer = document.createElement('div');
+    topAdContainer.id = 'top-ad-container';
+    topAdContainer.className = 'ad-container';
+    topAdContainer.innerHTML = '<div class="ad-label">Advertisement</div><div id="top-ad" class="ad-slot"></div>';
+    
+    // Insert after header
+    const appHeader = document.querySelector('.app-header');
+    appHeader.parentNode.insertBefore(topAdContainer, appHeader.nextSibling);
+    
+    // Side ad (only for desktop)
+    if (window.innerWidth >= 1200) {
+        const sideAdContainer = document.createElement('div');
+        sideAdContainer.id = 'side-ad-container';
+        sideAdContainer.className = 'ad-container side-ad';
+        sideAdContainer.innerHTML = '<div class="ad-label">Advertisement</div><div id="side-ad" class="ad-slot"></div>';
+        
+        // Insert to the right of the main container
+        const container = document.querySelector('.container');
+        const parentElement = container.parentNode;
+        
+        // Create a wrapper for the layout
+        const wrapper = document.createElement('div');
+        wrapper.className = 'content-with-ads';
+        
+        // Move the container inside the wrapper
+        parentElement.replaceChild(wrapper, container);
+        wrapper.appendChild(container);
+        wrapper.appendChild(sideAdContainer);
+    }
+    
+    // Bottom ad
+    const bottomAdContainer = document.createElement('div');
+    bottomAdContainer.id = 'bottom-ad-container';
+    bottomAdContainer.className = 'ad-container';
+    bottomAdContainer.innerHTML = '<div class="ad-label">Advertisement</div><div id="bottom-ad" class="ad-slot"></div>';
+    
+    // Insert at the bottom of the container
+    const container = document.querySelector('.container');
+    container.appendChild(bottomAdContainer);
+}
+
+// Load ads (placeholder for actual ad code)
+function loadAds() {
+    // This is where you would initialize your ad provider's code
+    // For example, with Google AdSense:
+    /*
+    (adsbygoogle = window.adsbygoogle || []).push({});
+    (adsbygoogle = window.adsbygoogle || []).push({});
+    (adsbygoogle = window.adsbygoogle || []).push({});
+    */
+    
+    // For now, we'll just add placeholder styling
+    document.querySelectorAll('.ad-slot').forEach(slot => {
+        slot.innerHTML = 'Ad would appear here';
+        slot.style.height = '90px';
+        slot.style.backgroundColor = 'rgba(200, 200, 200, 0.3)';
+        slot.style.display = 'flex';
+        slot.style.justifyContent = 'center';
+        slot.style.alignItems = 'center';
+        slot.style.fontSize = '0.8rem';
+        slot.style.color = 'var(--neutral-500)';
+    });
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+     // Wait for the core app to initialize
+     setTimeout(initAdminInterface, 500);
+ });
+
+// Add this to your initApp function in app.js
 
 // Initialize the app when the document is fully loaded
 document.addEventListener('DOMContentLoaded', initApp);
